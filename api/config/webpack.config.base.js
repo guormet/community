@@ -10,8 +10,8 @@ const webpackconfig = {
   entry: {
     server: path.join(utils.APP_PATH, 'index.js'),
   },
-  alias: {
-    '@': utils.appPath,
+  resolve: {
+    ...utils.getWebpackResolveConfig(),
   },
   output: {
     filename: '[name].bundle.js',

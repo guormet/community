@@ -1,5 +1,7 @@
 import send from '../config/MailConfig'
 import moment from 'moment'
+import jsonwebtoken from 'jsonwebtoken'
+import config from '../config'
 
 class LoginController {
   constructor() {}
@@ -23,6 +25,13 @@ class LoginController {
       }
     } catch (e) {
       console.log(e)
+    }
+  }
+  async login(ctx) {
+    let token = jsonwebtoken.sign({_id: 'keaton' }, config.JWT_SECRET, { expiresIn: '1d' })
+    ctx.body = {
+      code: 200,
+      token: token
     }
   }
 }

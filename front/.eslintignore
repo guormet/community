@@ -1,0 +1,12 @@
+/build/
+/config/
+/dist/
+/disk/
+/src/rduser/
+/src/common/
+/src/frame/
+/src/biz/usercenter/
+/src/biz/test/
+/src/biz/demo/
+/src/biz/style-skin-isolate/
+/src/biz/style-isolate/

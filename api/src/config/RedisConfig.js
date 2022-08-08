@@ -1,65 +1,71 @@
-import { createClient } from 'redis'
+import redis from 'redis'
+import { promisifyAll } from 'bluebird'
 import config from './index'
-import retryStrategy from 'node-redis-retry-strategy'
 
 const options = {
+  host: config.REDIS.host,
+  port: config.REDIS.port,
   password: config.REDIS.password,
-  socket: {
-    host: config.REDIS.host,
-    port: config.REDIS.port,
-    detect_buffers: true,
-    reconnectStrategy: retryStrategy()
+  detect_buffers: true,
+  retry_strategy: function (options) {
+    if (options.error && options.error.code === 'ECONNREFUSED') {
+      // End reconnecting on a specific error and flush all commands with
+      // a individual error
+      return new Error('The server refused the connection');
+    }
+    if (options.total_retry_time > 1000 * 60 * 60) {
+      // End reconnecting after a specific timeout and flush all commands
+      // with a individual error
+      return new Error('Retry time exhausted');
+    }
+    if (options.attempt > 10) {
+      // End reconnecting with built in error
+      return undefined;
+    }
+    // reconnect after
+    return Math.min(options.attempt * 100, 3000);
   }
 }
 
-const client = createClient(options)
+// const client = redis.createClient(options)
+const client = promisifyAll(redis.createClient(options))
 
-const initRedis = async () => {
-  client.on('error', (err) => console.log('Redis Client Error', err))
-  await client.connect()
+client.on('error', (err) => {
+  console.log('Redis Client Error:' + err);
+})
 
-  client.on('end', function () {
-    console.log('redis connection has closed')
-  })
-
-  client.on('reconnecting', function (o) {
-    console.log('redis client reconnecting', o.attempt, o.delay)
-  })
-}
-
-const setValue = async (key, value, time) => {
-  if (typeof value === 'undefined' || value == null || value === '') {
+const setValue = async (key, value, time ) => {
+  if (typeof value ===  'undefinded' || value === null || value === '') {
     return
   }
   if (typeof value === 'string') {
-    if (typeof time !== 'undefined') {
-      await client.set(key, value, 'EX', time)
+    if (typeof time !== 'undefinded') {
+      client.set(key, value, 'EX', time)
     } else {
-      await client.set(key, value)
+      client.set(key, value)
     }
   } else if (typeof value === 'object') {
-    // { key1: value1, key2: value2}
-    // Object.keys(value) => [key1, key2]
-    for (let i = 0; i < Object.keys(value).length; i++) {
-      const item = Object.keys(value)[i]
-      await client.hset(key, item, value[item], console.log)
-    }
+    Object.keys(value).forEach((item) => {
+      client.hset(key,item, value[item],redis.print)
+    })
   }
+  
 }
 
 // const {promisify} = require('util');
 // const getAsync = promisify(client.get).bind(client);
 
 const getValue = async (key) => {
-  return await client.get(key)
+  return client.getAsync(key)
 }
 
 const getHValue = async (key) => {
   // v8 Promisify method use util, must node > 8
   // return promisify(client.hgetall).bind(client)(key)
-
+  
   // bluebird async
-  return await client.hgetall(key)
+  return client.hgetallAsync(key)
+  // return await client.hgetall(key)
 }
 
 const delValue = (key) => {
@@ -77,6 +83,5 @@ export {
   setValue,
   getValue,
   getHValue,
-  delValue,
-  initRedis
+  delValue
 }
