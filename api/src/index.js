@@ -10,7 +10,7 @@ import cors from '@koa/cors'
 import compose from 'koa-compose'
 import compress from 'koa-compress'
 import config from './config/index'
-import errorHandle from './common/errorHandle'
+import errorHandle from './common/ErrorHandle'
 
 const app = new koa()
 

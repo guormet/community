@@ -2,6 +2,8 @@ import send from '../config/MailConfig'
 import moment from 'moment'
 import jsonwebtoken from 'jsonwebtoken'
 import config from '../config'
+import { checkCode } from '@/common/Utils'
+import errorCode from '@/common/ErrorCode'
 
 class LoginController {
   constructor() {}
@@ -28,6 +30,27 @@ class LoginController {
     }
   }
   async login(ctx) {
+    const body = ctx.request.query
+    let code = body.code
+    let sid = body.sid
+    let checkUser = false;
+    // 图形验证码校验
+    if (checkCode(sid, code)) {
+      // 用户名、密码校验
+      if (checkUser) {
+
+      } else {
+        ctx.body = {
+          code: 10001,
+          msg: errorCode[10001]
+        }
+      }
+    } else {
+      ctx.body = {
+        code: 10002,
+        msg: errorCode[10002]
+      }
+    }
     let token = jsonwebtoken.sign({_id: 'keaton' }, config.JWT_SECRET, { expiresIn: '1d' })
     ctx.body = {
       code: 200,
