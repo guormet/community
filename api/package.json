@@ -7,17 +7,17 @@
     "start": "nodemon --exec babel-node src/index.js",
     "webpack:debug": "node --inspect-brk ./node_modules/.bin/webpack --inline --progress",
     "build": "cross-env NODE_ENV=prod webpack --config config/webpack.config.prod.js",
-    "dev": "cross-env NODE_ENV=dev nodemon --exec babel-node --inspect ./src/index.js",
     "clean": "rimraf dist",
     "watch": "cross-env NODE_ENV=dev webpack --watch --progress --hide-modules --config config/webpack.config.dev.js",
     "debug": "nodemon --inspect ./dist/server.bundle.js",
-    "start:dist": "npm-run-all -p watch debug"
+    "dev": "npm-run-all -p watch debug"
   },
   "keywords": [],
   "author": "brian@toimc.com",
   "license": "ISC",
   "dependencies": {
     "@koa/cors": "^3.0.0",
+    "bcryptjs": "^2.4.3",
     "bluebird": "^3.7.2",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",

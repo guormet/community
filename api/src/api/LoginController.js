@@ -1,12 +1,18 @@
 import send from '../config/MailConfig'
 import moment from 'moment'
 import jsonwebtoken from 'jsonwebtoken'
+import bcrypt from 'bcryptjs'
 import config from '../config'
 import { checkCode } from '@/common/Utils'
 import errorCode from '@/common/ErrorCode'
+import User from '@/model/User'
 
 class LoginController {
   constructor() {}
+  /**
+   * 找回密码接口（发送邮件）
+   * @param {} ctx 
+   */
   async forget(ctx) {
     const { body } = ctx.request
     console.log(body)
@@ -29,32 +35,93 @@ class LoginController {
       console.log(e)
     }
   }
+  /**
+   * 登录接口
+   * @param {} ctx 
+   */
   async login(ctx) {
-    const body = ctx.request.query
+    const {body} = ctx.request
     let code = body.code
     let sid = body.sid
-    let checkUser = false;
     // 图形验证码校验
-    if (checkCode(sid, code)) {
-      // 用户名、密码校验
-      if (checkUser) {
-
-      } else {
+    let checkCodeResult = await checkCode(sid, code)
+    if (checkCodeResult) {  // 验证码验证通过
+      // 用户名、密码MongoDB查库校验
+      let user = await User.findOne({username: body.username})
+      if (user.password === body.password) {  // 用户名密码校验通过
+        let token = jsonwebtoken.sign({_id: user. _id}, config.JWT_SECRET, { expiresIn: '1d' })
+        ctx.body = {
+          code: 200,
+          token: token
+        }
+      } else {  // 用户名密码校验失败
         ctx.body = {
           code: 10001,
           msg: errorCode[10001]
         }
       }
-    } else {
+    } else {  // 验证码验证失败
       ctx.body = {
         code: 10002,
         msg: errorCode[10002]
       }
     }
-    let token = jsonwebtoken.sign({_id: 'keaton' }, config.JWT_SECRET, { expiresIn: '1d' })
-    ctx.body = {
-      code: 200,
-      token: token
+  }
+  /**
+   * 注册接口
+   * @param {} ctx 
+   */
+  async reg(ctx) {
+    const {body} = ctx.request
+    let code = body.code
+    let sid = body.sid
+    let check = true
+    let errorMsg = {}
+    // 图形验证码校验
+    let checkCodeResult = await checkCode(sid, code)
+    if (checkCodeResult) {  // 验证码验证通过
+      // 用户名MongoDB查库校验
+      let User1 = await User.findOne({username: body.username})
+      if (typeof User1.username !== 'undefined') {  // 存在邮箱
+        check = false
+        errorMsg = {
+          code: 10003,
+          msg: errorCode[10003]
+        }
+      }
+      let User2 = await User.findOne({username: body.name})
+      if (typeof User2.name !== 'undefined') {  // 存在昵称
+        check = false
+        errorMsg = {
+          code: 10004,
+          msg: errorCode[10004]
+        }
+      }
+      
+      if(check) {  // 不存在用户名/邮箱
+        // 密码加严
+        body.password  = await bcrypt.hash(body.password, 5)
+        // 插入一条用户数据
+        let user = new User({
+          username: body.username,
+          name: body.name,
+          password: body.password,
+          created: moment().format('YYYY-MM-DD HH:mm:ss')
+        })
+        let result = await user.save()
+        ctx.body = {
+          code: 200,
+          data: result,
+          msg: '注册成功，3秒后跳转登录页面'
+        }
+      } else {
+        ctx.body = {...errorMsg}
+      }
+    } else {  // 验证码验证失败
+      ctx.body = {
+        code: 10002,
+        msg: errorCode[10002]
+      }
     }
   }
 }
