@@ -32,7 +32,8 @@ localize('zh_CN', {
     password: '密码',
     name: '昵称',
     username: '账号',
-    code: '验证码'
+    code: '验证码',
+    repassword: '确认密码'
   },
   // 针对不同的name，定义不同的message消息
   fields: {
@@ -44,6 +45,9 @@ localize('zh_CN', {
       min: (field, { length }) => {
         return `请在${field}输入至少${length}个字符`
       }
+    },
+    repassword: {
+      confirmed: '输入与密码不匹配'
     }
   }
 })

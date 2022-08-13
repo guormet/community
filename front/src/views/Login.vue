@@ -50,7 +50,7 @@
                     </validation-provider>
                   </div>
                   <div class="layui-form-item">
-                    <validation-provider name="code" rules="required|length:4" v-slot="{errors}">
+                    <validation-provider name="code" rules="required|length:4" v-slot="{errors}" ref="codefield">
                       <div class="layui-row">
                         <label for="L_vercode" class="layui-form-label">验证码</label>
                         <div class="layui-input-inline">
@@ -65,11 +65,12 @@
                         </div>
                         <div class>
                           <span class="svg" style="color: #c00;" @click="_getCode()" v-html="svg"></span>
+                          <span style="color: #c00;">{{errors[0]}}</span>
                         </div>
                       </div>
-                      <div class="layui-form-mid">
-                        <span style="color: #c00;">{{errors[0]}}</span>
-                      </div>
+                      <!-- <div class="layui-form-mid">
+                          <span style="color: #c00;">{{errors[0]}}</span>
+                      </div> -->
                     </validation-provider>
                   </div>
                   <div class="layui-form-item">
@@ -107,6 +108,7 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { login } from '@/api/login'
 import { getCode } from '@/api/public'
+
 import uuid from 'uuid/dist/v4'
 export default {
   name: 'login',
@@ -152,10 +154,29 @@ export default {
         password: this.password,
         code: this.code,
         sid: this.$store.state.sid
-      }).then((res) => {
+      })
+      .then((res) => {
         if (res.code === 200) {
-          console.log(res)
+          this.username = ''
+          this.password = ''
+          this.code = ''
+          requestAnimationFrame(() => {
+            this.$refs.observer.reset()
+          })
+        } else if (res.code === 10002) {
+          this.$refs.codefield.setErrors([res.msg])
+        } else {
+          this.$alert(res.msg)
         }
+      })
+      .catch((err) => {
+        const data = err.response.data
+        if (data.code === 500) {
+          this.$alert('用户名密码校验失败，请检查！')
+        } else {
+          this.$alert('服务器错误')
+        } 
+        console.error(data.stack);
       })
     }
   }

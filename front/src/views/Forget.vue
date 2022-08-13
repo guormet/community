@@ -90,11 +90,12 @@
                         </div>
                         <div class>
                           <span class="svg" style="color: #c00;" @click="_getCode()" v-html="svg"></span>
+                          <span style="color: #c00;">{{errors[0]}}</span>
                         </div>
                       </div>
-                      <div class="layui-form-mid">
+                      <!-- <div class="layui-form-mid">
                         <span style="color: #c00;">{{errors[0]}}</span>
-                      </div>
+                      </div> -->
                     </validation-provider>
                   </div>
                   <div class="layui-form-item">

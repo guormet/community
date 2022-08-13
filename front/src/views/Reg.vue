@@ -54,8 +54,9 @@
                   </div>
                   <div class="layui-form-item">
                     <validation-provider
+                      vid="confirmation"
                       name="password"
-                      rules="required|min:6|max:16|confirmed:confirmation"
+                      rules="required|min:6|max:16"
                       v-slot="{errors}"
                     >
                       <div class="layui-row">
@@ -78,7 +79,7 @@
                     </validation-provider>
                   </div>
                   <div class="layui-form-item">
-                    <validation-provider v-slot="{ errors }" vid="confirmation">
+                    <validation-provider name="repassword" rules="confirmed:confirmation" v-slot="{ errors }">
                       <div class="layui-row">
                         <label for="L_repass" class="layui-form-label">确认密码</label>
                         <div class="layui-input-inline">
@@ -91,14 +92,14 @@
                             class="layui-input"
                           />
                         </div>
-                      </div>
-                      <div class="layui-row">
-                        <span style="color: #c00;">{{errors[0]}}</span>
+                        <div class="layui-form-mid">
+                          <span style="color: #c00;">{{errors[0]}}</span>
+                        </div>
                       </div>
                     </validation-provider>
                   </div>
                   <div class="layui-form-item">
-                    <validation-provider name="code" rules="required|length:4" v-slot="{errors}">
+                    <validation-provider name="code" rules="required|length:4" v-slot="{errors}" ref="codefield">
                       <div class="layui-row">
                         <label for="L_vercode" class="layui-form-label">验证码</label>
                         <div class="layui-input-inline">
@@ -113,11 +114,12 @@
                         </div>
                         <div class>
                           <span class="svg" style="color: #c00;" @click="_getCode()" v-html="svg"></span>
+                          <span style="color: #c00;">{{errors[0]}}</span>
                         </div>
                       </div>
-                      <div class="layui-form-mid">
+                      <!-- <div class="layui-form-mid">
                         <span style="color: #c00;">{{errors[0]}}</span>
-                      </div>
+                      </div> -->
                     </validation-provider>
                   </div>
                   <div class="layui-form-item">
@@ -150,13 +152,14 @@
 
 <script>
 import { getCode } from '@/api/public'
+import { reg } from '@/api/login'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 
 export default {
   name: 'reg',
   data () {
     return {
-      username: '1445190395@qq.com',
+      username: '',
       name: '',
       password: '',
       repassword: '',
@@ -173,8 +176,8 @@ export default {
   },
   methods: {
     _getCode () {
-      getCode().then((res) => {
-        console.log(res)
+      let sid = this.$store.state.sid
+      getCode(sid).then((res) => {
         if (res.code === 200) {
           this.svg = res.data
         }
@@ -183,7 +186,30 @@ export default {
     async register () {
       const isValid = await this.$refs.observer.validate()
       if (!isValid) {
-        return
+        reg({
+          username: this.username,
+          password: this.password,
+          name: this.name,
+          code: this.code,
+          sid: this.$store.state.sid
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            this.username = ''
+            this.password = ''
+            this.name = ''
+            this.repassword = ''
+            this.code = ''
+            requestAnimationFrame(() => {
+              this.$refs.observer.reset()
+            })
+            this.$router.push('/login')
+          } else if (res.code === 10002) {
+            this.$refs.codefield.setErrors([res.msg])
+          } else {
+            this.$alert(res.msg)
+          }
+        })
       }
     }
   }

@@ -25,6 +25,7 @@ export default {
 // 公用样式
 .svg {
   position: relative;
+  display: inline-block;
   top: -4px;
 }
 </style>

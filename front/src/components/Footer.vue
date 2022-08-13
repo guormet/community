@@ -1,13 +1,16 @@
 <template>
   <div class="fly-footer">
     <p>
-      <a href="http://fly.layui.com/" target="_blank">Imooc社区</a> 2017 &copy;
-      <a href="http://www.layui.com/" target="_blank">Imooc.com 出品</a>
+      <a href="#" target="_blank">KTN GO 社区页面展示</a> 2022 &copy;
+      <a href="#" target="_blank">张继东 出品</a>
     </p>
     <p>
-      <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
-      <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
-      <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
+      <a href="#" target="_blank">学习计划</a>
+      <a href="#" target="_blank">微信公众号（计划）</a>
+      <a href="#" target="_blank">微信小程序（计划）</a>
+      <a href="#" target="_blank">桌面应用（计划）</a>
+      <a href="#" target="_blank">移动端H5（计划）</a>
+      <a href="#" target="_blank">移动端混合APP（计划）</a>
     </p>
   </div>
 </template>

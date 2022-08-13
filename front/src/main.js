@@ -3,9 +3,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+import Alert from './components/modules/alert'
 import axios from 'axios'
 
 import '@/utils/veevalidate'
+
+Vue.use(Alert)
 
 Vue.config.productionTip = false
 

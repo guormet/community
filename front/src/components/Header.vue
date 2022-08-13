@@ -2,7 +2,7 @@
   <div class="fly-header layui-bg-black">
     <div class="layui-container">
       <a class="fly-logo" href="/">
-        <img src="../assets/logo-2.png" alt="layui" />
+        <img src="../assets/logo-2.png" alt="layui" style="height:60px"/>
       </a>
       <ul class="layui-nav fly-nav layui-hide-xs">
         <li class="layui-nav-item layui-this">
@@ -11,13 +11,13 @@
           </a>
         </li>
         <li class="layui-nav-item">
-          <a href="case/case.html">
+          <a href="/">
             <i class="iconfont icon-iconmingxinganli"></i>案例
           </a>
         </li>
         <li class="layui-nav-item">
           <a href="http://www.layui.com/" target="_blank">
-            <i class="iconfont icon-ui"></i>框架
+            <i class="iconfont icon-ui"></i>采用框架
           </a>
         </li>
       </ul>
@@ -82,7 +82,7 @@ export default {
 <style lang="scss" scoped>
 .fly-logo {
   left: -15px;
-  top: -10px;
+  top: 0px;
   margin-left: 15px;
 }
 </style>
