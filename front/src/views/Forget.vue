@@ -1,19 +1,29 @@
 <template>
   <div class="layui-container fly-marginTop">
-    <div class="fly-panel fly-panel-user" pad20>
-      <div class="layui-tab layui-tab-brief" lay-filter="user">
+    <div 
+      class="fly-panel fly-panel-user"
+      pad20>
+      <div
+        class="layui-tab layui-tab-brief"
+        lay-filter="user">
         <ul class="layui-tab-title">
           <li>
-            <router-link :to="{name: 'login'}">登入</router-link>
+            <router-link :to="{name: 'login'}">
+              登入
+            </router-link>
           </li>
           <li class="layui-this">
             找回密码
             <!--重置密码-->
           </li>
         </ul>
-        <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
-          
-          <validation-observer ref="observer" v-slot="{ validate }">
+        <div
+          id="LAY_ucm"
+          class="layui-form layui-tab-content"
+          style="padding: 20px 0;">
+          <validation-observer
+            ref="observer"
+            v-slot="{ validate }">
             <div class="layui-tab-item layui-show">
               <!-- 重置密码 -->
               <!--
@@ -57,49 +67,69 @@
               <div class="layui-form layui-form-pane">
                 <form method="post">
                   <div class="layui-form-item">
-                    <label for="L_email" class="layui-form-label">用户名</label>
-                    <validation-provider name="email" rules="required|email" v-slot="{errors}">
+                    <label
+                      for="L_email"
+                      class="layui-form-label">用户名</label>
+                    <validation-provider
+                      v-slot="{errors}"
+                      name="email"
+                      rules="required|email">
                       <div class="layui-input-inline">
                         <input
+                          v-model="username"
                           type="text"
                           name="username"
-                          v-model="username"
                           placeholder="请输入用户名"
                           autocomplete="off"
-                          class="layui-input"
-                        />
+                          class="layui-input">
                       </div>
                       <div class="layui-form-mid">
-                        <span style="color: #c00;">{{errors[0]}}</span>
+                        <span style="color: #c00;">
+                          {{ errors[0] }}
+                        </span>
                       </div>
                     </validation-provider>
                   </div>
                   <div class="layui-form-item">
-                    <validation-provider name="code" rules="required|length:4" v-slot="{errors}">
+                    <validation-provider
+                      v-slot="{errors}"
+                      name="code"
+                      rules="required|length:4">
                       <div class="layui-row">
-                        <label for="L_vercode" class="layui-form-label">验证码</label>
+                        <label
+                          for="L_vercode"
+                          class="layui-form-label">验证码</label>
                         <div class="layui-input-inline">
                           <input
+                            v-model="code"
                             type="text"
                             name="code"
-                            v-model="code"
                             placeholder="请输入验证码"
                             autocomplete="off"
-                            class="layui-input"
-                          />
+                            class="layui-input">
                         </div>
                         <div class>
-                          <span class="svg" style="color: #c00;" @click="_getCode()" v-html="svg"></span>
-                          <span style="color: #c00;">{{errors[0]}}</span>
+                          <span
+                            ref="codeShow"
+                            class="svg"
+                            @click="_getCode()"/>
+                          <!-- <span style="color: #c00;">{{errors[0]}}</span> -->
                         </div>
                       </div>
-                      <!-- <div class="layui-form-mid">
-                        <span style="color: #c00;">{{errors[0]}}</span>
-                      </div> -->
+                      <div class="layui-form-mid">
+                        <span style="color: #c00;">
+                          {{ errors[0] }}
+                        </span>
+                      </div>
                     </validation-provider>
                   </div>
                   <div class="layui-form-item">
-                    <button type="button" class="layui-btn" @click="validate().then(submit)">提交</button>
+                    <button
+                      type="button"
+                      class="layui-btn"
+                      @click="validate().then(submit)">
+                      提交
+                    </button>
                   </div>
                 </form>
               </div>
@@ -112,11 +142,11 @@
 </template>
 
 <script>
-import { forget } from '@/api/login'
-import { getCode } from '@/api/public'
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { forget } from '@/api/login';
+import { getCode } from '@/api/public';
+import { ValidationProvider, ValidationObserver } from 'vee-validate';
 export default {
-  name: 'forget',
+  name: 'Forget',
   components: {
     ValidationObserver,
     ValidationProvider
@@ -126,37 +156,38 @@ export default {
       username: '',
       code: '',
       svg: ''
-    }
+    };
   },
   mounted () {
-    this._getCode()
+    this._getCode();
   },
   methods: {
     _getCode () {
-      getCode().then((res) => {
-        console.log(res)
-        if (res.code === 200) {
-          this.svg = res.data
+      getCode().then( ( res ) => {
+        console.log( res );
+        if ( res.code === 200 ) {
+          this.svg = res.data;
+          this.$refs.codeShow.innerHTML = this.svg;
         }
-      })
+      } );
     },
     async submit () {
-      const isValid = await this.$refs.observer.validate()
-      if (!isValid) {
-        return
+      const isValid = await this.$refs.observer.validate();
+      if ( !isValid ) {
+        return;
       }
-      forget({
+      forget( {
         username: this.username,
         code: this.code
-      }).then((res) => {
-        console.log(res)
-        if (res.code === 200) {
-          alert('邮件发送成功')
+      } ).then( ( res ) => {
+        console.log( res );
+        if ( res.code === 200 ) {
+          alert( '邮件发送成功' );
         }
-      })
+      } );
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

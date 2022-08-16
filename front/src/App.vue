@@ -1,20 +1,20 @@
 <template>
   <div id="app">
-    <imooc-header></imooc-header>
-    <router-view></router-view>
-    <imooc-footer></imooc-footer>
+    <imooc-header />
+    <router-view />
+    <imooc-footer />
   </div>
 </template>
 <script>
-import Header from '@/components/Header.vue'
-import Footer from '@/components/Footer.vue'
+import Header from '@/components/Header.vue';
+import Footer from '@/components/Footer.vue';
 export default {
-  name: 'app',
+  name: 'App',
   components: {
     'imooc-header': Header,
     'imooc-footer': Footer
   }
-}
+};
 </script>
 
 <style lang="scss">
@@ -26,6 +26,7 @@ export default {
 .svg {
   position: relative;
   display: inline-block;
-  top: -4px;
+  height: 50px;
+  top: -10px;
 }
 </style>

@@ -1,25 +1,41 @@
 <template>
   <div v-show="isShow">
     <div class="alert">
-      <div class="flex">{{msg}}</div>
-      <div v-if="type === 'alert'">
-        <div class="btnCommon success" @click="close()">确定</div>
+      <div class="flex">
+        {{ msg }}
       </div>
-      <div v-else class="space-round">
-        <div class="btnCommon cancel" @click="cancelEvent()">取消</div>
-        <div class="btnCommon success" @click="successEvent()">确定</div>
+      <div v-if="alertType === 'alert'">
+        <div
+          class="btnCommon success"
+          @click="close()">
+          确定
+        </div>
       </div>
-      
-
+      <div
+        v-else
+        class="space-round">
+        <div
+          class="btnCommon cancel"
+          @click="cancelEvent()">
+          取消
+        </div>
+        <div
+          class="btnCommon success"
+          @click="successEvent()">
+          确定
+        </div>
+      </div>
     </div>
-    <div class="mask" @click="closeMask()"></div>
+    <div
+      class="mask"
+      @click="closeMask()"/>
   </div>
 </template>
 
 <script>
   export default {
     props: {
-      type: {
+      alertType: {
         type: String,
         default: 'alert'
       },
@@ -33,32 +49,36 @@
       },
       success: {
         type: Function,
-        default: () => {console.log('点击了确定');}
+        default: () => {
+ console.log( '点击了确定' ); 
+}
       },
       cancel: {
         type: Function,
-        default: () => {console.log('点击了取消');}
+        default: () => {
+          console.log( '点击了取消' ); 
+        }
       }
     },
     methods: {
-      close() {
-        this.isShow = false
+      close () {
+        this.isShow = false;
       },
-      closeMask() {
-        if (this.type === 'alert') {
-          this.close()
+      closeMask () {
+        if ( this.alertType === 'alert' ) {
+          this.close();
         }
       },
-      cancelEvent() {
-        this.cancel()
-        this.close()
+      cancelEvent () {
+        this.cancel();
+        this.close();
       },
-      successEvent() {
-        this.success()
-        this.close()
+      successEvent () {
+        this.success();
+        this.close();
       }
-    },
-  }
+    }
+  };
 </script>
 
 <style lang="scss" scoped>

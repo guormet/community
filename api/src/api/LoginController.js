@@ -1,12 +1,11 @@
-import send from '../config/MailConfig'
 import moment from 'moment'
 import jsonwebtoken from 'jsonwebtoken'
-import bcrypt from 'bcryptjs'
-import config from '../config'
+import send from '@/config/MailConfig'
+import config from '@/config'
 import { checkCode } from '@/common/Utils'
+import { aes_decrypt, aes_encrypt } from '@/common/crypto'
 import errorCode from '@/common/ErrorCode'
 import User from '@/model/User'
-
 class LoginController {
   constructor() {}
   /**
@@ -48,7 +47,10 @@ class LoginController {
     if (checkCodeResult) {  // 验证码验证通过
       // 用户名、密码MongoDB查库校验
       let user = await User.findOne({username: body.username})
-      if (user.password === body.password) {  // 用户名密码校验通过
+      // aes解密
+      let inputPwd = await aes_decrypt(body.password, 1)
+      let enPwd = await aes_decrypt(user.password, 0)
+      if (inputPwd === enPwd) {  // 用户名密码校验通过
         let token = jsonwebtoken.sign({_id: user. _id}, config.JWT_SECRET, { expiresIn: '1d' })
         ctx.body = {
           code: 200,
@@ -82,15 +84,15 @@ class LoginController {
     if (checkCodeResult) {  // 验证码验证通过
       // 用户名MongoDB查库校验
       let User1 = await User.findOne({username: body.username})
-      if (typeof User1.username !== 'undefined') {  // 存在邮箱
+      if (User1 && typeof User1.username !== 'undefined') {  // 存在邮箱
         check = false
         errorMsg = {
           code: 10003,
           msg: errorCode[10003]
         }
       }
-      let User2 = await User.findOne({username: body.name})
-      if (typeof User2.name !== 'undefined') {  // 存在昵称
+      let User2 = await User.findOne({name: body.name})
+      if (User2 && typeof User2.name !== 'undefined') {  // 存在昵称
         check = false
         errorMsg = {
           code: 10004,
@@ -99,16 +101,18 @@ class LoginController {
       }
       
       if(check) {  // 不存在用户名/邮箱
-        // 密码加严
-        body.password  = await bcrypt.hash(body.password, 5)
+        // 密码解密 && 加密
+        let pwd = await aes_decrypt(body.password, 1)
+        let enPwd = await aes_encrypt(pwd)
         // 插入一条用户数据
         let user = new User({
           username: body.username,
           name: body.name,
-          password: body.password,
+          password: enPwd,
           created: moment().format('YYYY-MM-DD HH:mm:ss')
         })
         let result = await user.save()
+        result.password = body.password
         ctx.body = {
           code: 200,
           data: result,

@@ -1,5 +1,5 @@
-const errorHandle = (err) => {
-  console.log(err)
-}
+const errorHandle = ( err ) => {
+  console.log( err );
+};
 
-export default errorHandle
+export default errorHandle;

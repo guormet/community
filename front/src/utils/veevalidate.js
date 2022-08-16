@@ -1,24 +1,24 @@
-import { extend, localize } from 'vee-validate'
-import { required, email, min, length, confirmed, max } from 'vee-validate/dist/rules'
-import zh from 'vee-validate/dist/locale/zh_CN.json'
+import { extend, localize } from 'vee-validate';
+import { required, email, min, length, confirmed, max } from 'vee-validate/dist/rules';
+import zh from 'vee-validate/dist/locale/zh_CN.json';
 
-extend('email', email)
-extend('min', min)
-extend('required', required)
-extend('length', length)
-extend('confirmed', confirmed)
-extend('max', max)
+extend( 'email', email );
+extend( 'min', min );
+extend( 'required', required );
+extend( 'length', length );
+extend( 'confirmed', confirmed );
+extend( 'max', max );
 
 // Custom validate
-extend('name', {
-  validate: value => {
-    console.log((/^\d+/).test(value))
-    return !(/^\d+/).test(value)
+extend( 'name', {
+  validate: ( value ) => {
+    console.log( ( /^\d+/ ).test( value ) );
+    return !( /^\d+/ ).test( value );
   },
   message: '不能以纯数字为昵称'
-})
+} );
 
-localize('zh_CN', {
+localize( 'zh_CN', {
   // 使用扩展运算符，扩展中文包
   messages: {
     ...zh.messages,
@@ -42,12 +42,12 @@ localize('zh_CN', {
       required: '请输入{_field_}'
     },
     name: {
-      min: (field, { length }) => {
-        return `请在${field}输入至少${length}个字符`
+      min: ( field, { length } ) => {
+        return `请在${field}输入至少${length}个字符`;
       }
     },
     repassword: {
       confirmed: '输入与密码不匹配'
     }
   }
-})
+} );

@@ -1,18 +1,18 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-Vue.use(Vuex)
+Vue.use( Vuex );
 
-export default new Vuex.Store({
+export default new Vuex.Store( {
   state: {
     sid: ''
   },
   mutations: {
-    setSid (state, value) {
-      state.sid = value
+    setSid ( state, value ) {
+      state.sid = value;
     }
   },
   actions: {
 
   }
-})
+} );
