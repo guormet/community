@@ -3,7 +3,11 @@
     <div class="fly-panel fly-column">
       <div class="layui-container">
         <ul class="layui-clear">
-          <li class="layui-hide-xs"><a href="/">首页</a></li>
+          <router-link tag="li" to="/" class="layui-hide-xs">
+            <a href="/">
+              首页
+            </a>
+          </router-link>
           <router-link v-for="(item, index) in list" :key="'panel' + index" tag="li" :to="item.path">
             <a href="/">
               {{item.name}}
@@ -12,8 +16,10 @@
           </router-link>
 
           <!-- 用户登入后显示 -->
-          <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/">我发表的贴</a></li>
-          <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/">我收藏的贴</a></li>
+          <template v-if="isLogin">
+            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/">我发表的贴</a></li>
+            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/">我收藏的贴</a></li>
+          </template>
         </ul>
         <div class="fly-column-right layui-hide-xs">
           <span class="fly-search"><i class="layui-icon"></i></span>
@@ -63,7 +69,8 @@
             path: '/index/logs',
             isNew: false
           }
-        ]
+        ],
+        isLogin: this.$store.state.isLogin
       };
     }
   };

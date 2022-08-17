@@ -11,7 +11,8 @@ const Template1 = () => import( /* webpackChunkName: 'template1' */ './views/cha
 Vue.use( Router );
 
 export default new Router( {
-  linkActiveClass: 'layui-this',
+  linkExactActiveClass: 'layui-this',
+  // linkActiveClass: 'layui-this',
   routes: [
     {
       path: '/',
