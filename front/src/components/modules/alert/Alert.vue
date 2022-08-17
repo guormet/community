@@ -7,7 +7,7 @@
       <div v-if="alertType === 'alert'">
         <div
           class="btnCommon success"
-          @click="close()">
+          @click="closeEvent()">
           确定
         </div>
       </div>
@@ -34,6 +34,7 @@
 
 <script>
   export default {
+    name: 'AlertCom',
     props: {
       alertType: {
         type: String,
@@ -43,31 +44,38 @@
         type: String,
         default: '这是Alert组件'
       },
-      isShow: {
-        type: Boolean,
-        default: false
-      },
       success: {
         type: Function,
         default: () => {
- console.log( '点击了确定' ); 
-}
+          // console.log( '点击了确定' );
+        }
       },
       cancel: {
         type: Function,
         default: () => {
-          console.log( '点击了取消' ); 
+          // console.log( '点击了取消' ); 
+        }
+      },
+      close: {
+        type: Function,
+        default: () => {
+          // console.log( '点击了关闭' ); 
         }
       }
     },
+    data () {
+      return {
+        isShow: false
+      };
+    },
     methods: {
-      close () {
-        this.isShow = false;
-      },
       closeMask () {
         if ( this.alertType === 'alert' ) {
           this.close();
         }
+      },
+      closeEvent () {
+        this.close();
       },
       cancelEvent () {
         this.cancel();

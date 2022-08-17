@@ -12,7 +12,6 @@ extend( 'max', max );
 // Custom validate
 extend( 'name', {
   validate: ( value ) => {
-    console.log( ( /^\d+/ ).test( value ) );
     return !( /^\d+/ ).test( value );
   },
   message: '不能以纯数字为昵称'

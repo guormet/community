@@ -137,14 +137,14 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate';
-import uuid from 'uuid/dist/v4';
+import { v4 as uuidv4 } from 'uuid';
 
 import { login } from '@/api/login';
 import { getCode } from '@/api/public';
 import { aes_encrypt } from '@/utils/crypto';
 
 export default {
-  name: 'Login',
+  name: 'LoginPage',
   components: {
     ValidationObserver,
     ValidationProvider
@@ -162,7 +162,7 @@ export default {
     if ( localStorage.getItem( 'sid' ) ) {
       sid = localStorage.getItem( 'sid' );
     } else {
-      sid = uuid();
+      sid = uuidv4();
       localStorage.setItem( 'sid', sid );
     }
     this.$store.commit( 'setSid', sid );
@@ -211,8 +211,7 @@ export default {
           this.$alert( '用户名密码校验失败，请检查！' );
         } else {
           this.$alert( '服务器错误' );
-        } 
-        console.error( data.stack );
+        }
       } );
     }
   }

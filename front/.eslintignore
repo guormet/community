@@ -10,3 +10,4 @@
 /.gitignore
 /public
 /src/assets
+/src/utils/errorHandle.js

@@ -146,7 +146,7 @@ import { forget } from '@/api/login';
 import { getCode } from '@/api/public';
 import { ValidationProvider, ValidationObserver } from 'vee-validate';
 export default {
-  name: 'Forget',
+  name: 'ForgetPage',
   components: {
     ValidationObserver,
     ValidationProvider
@@ -164,7 +164,6 @@ export default {
   methods: {
     _getCode () {
       getCode().then( ( res ) => {
-        console.log( res );
         if ( res.code === 200 ) {
           this.svg = res.data;
           this.$refs.codeShow.innerHTML = this.svg;
@@ -180,9 +179,8 @@ export default {
         username: this.username,
         code: this.code
       } ).then( ( res ) => {
-        console.log( res );
         if ( res.code === 200 ) {
-          alert( '邮件发送成功' );
+          this.$alert( '邮件发送成功' );
         }
       } );
     }

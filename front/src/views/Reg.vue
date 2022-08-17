@@ -209,7 +209,7 @@ import { aes_encrypt } from '@/utils/crypto';
 import { ValidationProvider, ValidationObserver } from 'vee-validate';
 
 export default {
-  name: 'Reg',
+  name: 'RegPage',
   components: {
     ValidationObserver,
     ValidationProvider
