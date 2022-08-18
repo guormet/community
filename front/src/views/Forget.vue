@@ -163,26 +163,26 @@ export default {
   },
   methods: {
     _getCode () {
-      getCode().then( ( res ) => {
-        if ( res.code === 200 ) {
+      getCode().then((res) => {
+        if (res.code === 200) {
           this.svg = res.data;
           this.$refs.codeShow.innerHTML = this.svg;
         }
-      } );
+      });
     },
     async submit () {
       const isValid = await this.$refs.observer.validate();
-      if ( !isValid ) {
+      if (!isValid) {
         return;
       }
-      forget( {
+      forget({
         username: this.username,
         code: this.code
-      } ).then( ( res ) => {
-        if ( res.code === 200 ) {
-          this.$alert( '邮件发送成功' );
+      }).then((res) => {
+        if (res.code === 200) {
+          this.$alert('邮件发送成功');
         }
-      } );
+      });
     }
   }
 };

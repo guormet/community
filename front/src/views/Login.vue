@@ -159,60 +159,60 @@ export default {
   },
   mounted () {
     let sid = '';
-    if ( localStorage.getItem( 'sid' ) ) {
-      sid = localStorage.getItem( 'sid' );
+    if (localStorage.getItem('sid')) {
+      sid = localStorage.getItem('sid');
     } else {
       sid = uuidv4();
-      localStorage.setItem( 'sid', sid );
+      localStorage.setItem('sid', sid);
     }
-    this.$store.commit( 'setSid', sid );
+    this.$store.commit('setSid', sid);
     this._getCode();
   },
   methods: {
     _getCode () {
       let sid = this.$store.state.sid;
-      getCode( sid ).then( ( res ) => {
-        if ( res.code === 200 ) {
+      getCode(sid).then((res) => {
+        if (res.code === 200) {
           this.svg = res.data;
           this.$refs.codeShow.innerHTML = this.svg;
         }
-      } );
+      });
     },
     async submit () {
       const isValid = await this.$refs.observer.validate();
-      if ( !isValid ) {
+      if (!isValid) {
         return;
       }
-      login( {
+      login({
         username: this.username,
-        password: aes_encrypt( this.password ),
+        password: aes_encrypt(this.password),
         code: this.code,
         sid: this.$store.state.sid
-      } )
-      .then( ( res ) => {
-        if ( res.code === 200 ) {
+      })
+      .then((res) => {
+        if (res.code === 200) {
           this.username = '';
           this.password = '';
           this.code = '';
-          requestAnimationFrame( () => {
+          requestAnimationFrame(() => {
             this.$refs.observer.reset();
-          } );
-        } else if ( res.code === 10002 ) {
-          this.$refs.codefield.setErrors( [
+          });
+        } else if (res.code === 10002) {
+          this.$refs.codefield.setErrors([
             res.msg
-          ] );
+          ]);
         } else {
-          this.$alert( res.msg );
+          this.$alert(res.msg);
         }
-      } )
-      .catch( ( err ) => {
+      })
+      .catch((err) => {
         const data = err.response.data;
-        if ( data.code === 500 ) {
-          this.$alert( '用户名密码校验失败，请检查！' );
+        if (data.code === 500) {
+          this.$alert('用户名密码校验失败，请检查！');
         } else {
-          this.$alert( '服务器错误' );
+          this.$alert('服务器错误');
         }
-      } );
+      });
     }
   }
 };

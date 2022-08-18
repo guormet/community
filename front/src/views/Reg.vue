@@ -230,53 +230,53 @@ export default {
   methods: {
     _getCode () {
       let sid = this.$store.state.sid;
-      getCode( sid ).then( ( res ) => {
-        if ( res.code === 200 ) {
+      getCode(sid).then((res) => {
+        if (res.code === 200) {
           this.svg = res.data;
           this.$refs.codeShow.innerHTML = this.svg;
         }
-      } );
+      });
     },
     async register () {
       const isValid = await this.$refs.observer.validate();
-      if ( isValid ) {
-        reg( {
+      if (isValid) {
+        reg({
           username: this.username,
-          password: aes_encrypt( this.password ),
+          password: aes_encrypt(this.password),
           name: this.name,
           code: this.code,
           sid: this.$store.state.sid
-        } )
-        .then( ( res ) => {
-          if ( res.code === 200 ) {
+        })
+        .then((res) => {
+          if (res.code === 200) {
             this.username = '';
             this.password = '';
             this.name = '';
             this.repassword = '';
             this.code = '';
-            requestAnimationFrame( () => {
+            requestAnimationFrame(() => {
               this.$refs.observer.reset();
-            } );
-            this.$alert( res.msg );
-            setTimeout( () => {
-              this.$router.push( '/login' );
-            }, 3000 );
-          } else if ( res.code === 10002 ) {
-            this.$refs.codeField.setErrors( [
+            });
+            this.$alert(res.msg);
+            setTimeout(() => {
+              this.$router.push('/login');
+            }, 3000);
+          } else if (res.code === 10002) {
+            this.$refs.codeField.setErrors([
               res.msg
-            ] );
-          } else if ( res.code === 10003 ) {
-            this.$refs.usernameField.setErrors( [
+            ]);
+          } else if (res.code === 10003) {
+            this.$refs.usernameField.setErrors([
               res.msg
-            ] );
-          } else if ( res.code === 10004 ) {
-            this.$refs.nameField.setErrors( [
+            ]);
+          } else if (res.code === 10004) {
+            this.$refs.nameField.setErrors([
               res.msg
-            ] );
+            ]);
           } else {
-            this.$alert( res.msg );
+            this.$alert(res.msg);
           } 
-        } );
+        });
       }
     }
   }

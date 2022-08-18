@@ -3,19 +3,36 @@
     <div class="fly-panel fly-link">
       <h3 class="fly-panel-title">友情链接</h3>
       <dl class="fly-panel-main">
-        <dd><a href="/" target="_blank">layui</a></dd>
-        <dd><a href="http://layim.layui.com/" target="_blank">WebIM</a></dd>
-        <dd><a href="http://layer.layui.com/" target="_blank">layer</a></dd>
-        <dd><a href="/laydate/" target="_blank">layDate</a></dd>
-        <dd><a href="/" class="fly-link">申请友链</a></dd>
+        <dd v-for="(item, index) in list" :key="`links${index}`">
+          <a href="item.link" target="_blank">{{item.title}}</a></dd>
+        <dd><a @click.prevent="applyLink" class="fly-link">申请友链</a></dd>
       </dl>
     </div>
   </div>
 </template>
 
 <script>
+  import {getLinks} from '@/api/content';
   export default {
-    name: 'LinksCom'
+    name: 'LinksCom',
+    data () {
+      return {
+        list: []
+      };
+    },
+    mounted () {
+      this._getLinks();
+    },
+    methods: {
+      _getLinks () {
+        getLinks().then((res) => {
+          this.list = res.data;
+        });
+      },
+      applyLink () {
+        // do something...
+      }
+    }
   };
 </script>
 

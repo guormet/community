@@ -4,17 +4,8 @@
       <h3 class="fly-panel-title">温馨通道</h3>
       <div class="fly-panel-main layui-row">
         <ul class="layui-clear ktn-quick">
-          <li class="layui-col-xs6">
-            <a href="/" target="_blank">gihub</a>
-          </li>
-          <li class="layui-col-xs6">
-            <a href="/" target="_blank">gitLee</a>
-          </li>
-          <li class="layui-col-xs6">
-            <a href="/" target="_blank">gitlab</a>
-          </li>
-          <li class="layui-col-xs6">
-            <a href="/" target="_blank">gitMooc</a>
+          <li class="layui-col-xs6" v-for="(item, index) in list" :key="`tips${index}`">
+            <a :href="item.link" target="_blank">{{item.title}}</a>
           </li>
         </ul>
       </div>
@@ -23,8 +14,24 @@
 </template>
 
 <script>
+  import {getTips} from '@/api/content';
   export default {
-    name: 'TipsCom'
+    name: 'TipsCom',
+    data () {
+      return {
+        list: []
+      };
+    },
+    mounted () {
+      this._getTips();
+    },
+    methods: {
+      _getTips () {
+        getTips().then((res) => {
+          this.list = res.data;
+        });
+      }
+    }
   };
 </script>
 

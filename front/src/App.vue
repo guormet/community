@@ -29,4 +29,7 @@ export default {
   height: 50px;
   top: -10px;
 }
+.gray {
+  color: #999;
+}
 </style>

@@ -70,7 +70,7 @@
     },
     methods: {
       closeMask () {
-        if ( this.alertType === 'alert' ) {
+        if (this.alertType === 'alert') {
           this.close();
         }
       },

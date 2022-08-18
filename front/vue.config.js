@@ -1,22 +1,22 @@
 module.exports = {
   devServer: {
-    proxy: 'http://localhost:3000'
+    proxy: 'http://localhost:36742'
   },
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     config.module
       .rule('vue')
       .use('vue-loader')
       .loader('vue-loader')
-      .tap(options => {
+      .tap((options) => {
         options.compilerOptions.directives = {
-          html(node, directiveMeta) {
+          html (node, directiveMeta) {
             (node.props || (node.props = [])).push({
               name: 'innerHTML',
               value: `xss(_s(${directiveMeta.value}))`
-            })
+            });
           }
-        }
-        return options
-      })
+        };
+        return options;
+      });
   }
-}
+};

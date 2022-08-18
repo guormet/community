@@ -2,15 +2,15 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from '@/views/Home.vue';
 
-const Login = () => import( /* webpackChunkName: 'login' */ './views/Login.vue' );
-const Reg = () => import( /* webpackChunkName: 'reg' */ './views/Reg.vue' );
-const Forget = () => import( /* webpackChunkName: 'forget' */ './views/Forget.vue' );
-const Index = () => import( /* webpackChunkName: 'index' */ './views/channels/Index.vue' );
-const Template1 = () => import( /* webpackChunkName: 'template1' */ './views/channels/Template1.vue' );
+const Login = () => import(/* webpackChunkName: 'login' */ './views/Login.vue');
+const Reg = () => import(/* webpackChunkName: 'reg' */ './views/Reg.vue');
+const Forget = () => import(/* webpackChunkName: 'forget' */ './views/Forget.vue');
+const Index = () => import(/* webpackChunkName: 'index' */ './views/channels/Index.vue');
+const Template1 = () => import(/* webpackChunkName: 'template1' */ './views/channels/Template1.vue');
 
-Vue.use( Router );
+Vue.use(Router);
 
-export default new Router( {
+export default new Router({
   linkExactActiveClass: 'layui-this',
   // linkActiveClass: 'layui-this',
   routes: [
@@ -39,11 +39,11 @@ export default new Router( {
       path: '/reg',
       name: 'reg',
       component: Reg,
-      beforeEnter: ( to, from, next ) => {
-        if ( from.name === 'login' ) {
+      beforeEnter: (to, from, next) => {
+        if (from.name === 'login') {
           next();
         } else {
-          next( '/login' );
+          next('/login');
         }
       }
     },
@@ -53,4 +53,4 @@ export default new Router( {
       component: Forget
     }
   ]
-} );
+});

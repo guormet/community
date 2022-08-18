@@ -47,7 +47,7 @@ module.exports = {
         'semi': [ 'error', 'always' ],    // 要求使用分号代替 ASI
         'space-before-blocks': 'error', // 要求语句块之前的空格
         'space-before-function-paren': 'error', // 要求函数圆括号之前有一个空格
-        'space-in-parens': [ 'error', 'always' ], // 强制圆括号内的空格
+        'space-in-parens': [ 'error', 'never' ], // 强制圆括号内的空格
         'space-infix-ops': 'error', // 要求中缀操作符周围有空格
         'space-unary-ops': 'error', // 要求在一元操作符之前或之后存在空格
         'spaced-comment': [ 'error', 'always' ],  // 要求在注释前有空白 (space 或 tab) 

@@ -31,25 +31,12 @@ const webpackconfig = {
   externals: [nodeExcternals()],
   plugins: [
     new CleanWebpackPlugin(),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV:
-          process.env.NODE_ENV === 'production' ||
-          process.env.NODE_ENV === 'prod'
-            ? "'production'"
-            : "'development'",
-      },
-    }),
+    new webpack.EnvironmentPlugin(['NODE_ENV'])
   ],
   node: {
-    console: true,
     global: true,
-    process: true,
-    Buffer: true,
     __filename: true,
     __dirname: true,
-    setImmediate: true,
-    path: true,
   },
 }
 

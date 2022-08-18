@@ -1,11 +1,16 @@
-import redis from 'redis'
-import { promisifyAll } from 'bluebird'
-import config from './index'
+// import redis from 'redis'
+import {createClient } from 'redis';
+import { promisifyAll } from 'bluebird';
+import config from './index';
+// import log4js from '@/config/Log4j'
+
+// const logger = log4js.getLogger('out')
 
 const options = {
   host: config.REDIS.host,
   port: config.REDIS.port,
   password: config.REDIS.password,
+  no_ready_check: true,
   detect_buffers: true,
   retry_strategy: function (options) {
     if (options.error && options.error.code === 'ECONNREFUSED') {
@@ -20,68 +25,76 @@ const options = {
     }
     if (options.attempt > 10) {
       // End reconnecting with built in error
+      console.log('already tried 10 times!');
       return undefined;
     }
     // reconnect after
     return Math.min(options.attempt * 100, 3000);
   }
-}
+};
 
-// const client = redis.createClient(options)
-const client = promisifyAll(redis.createClient(options))
+// const client = redis. createClient(options)
+let client = promisifyAll(createClient(options));
 
 client.on('error', (err) => {
   console.log('Redis Client Error:' + err);
-})
+});
 
-const setValue = async (key, value, time ) => {
-  if (typeof value ===  'undefinded' || value === null || value === '') {
-    return
+const setValue = (key, value, time) => {
+  if (!client.connected) {
+    client = promisifyAll(createClient(options));
+  }
+  if (typeof value === 'undefined' || value == null || value === '') {
+    return;
   }
   if (typeof value === 'string') {
-    if (typeof time !== 'undefinded') {
-      client.set(key, value, 'EX', time)
+    if (typeof time !== 'undefined') {
+      // eslint-disable-next-line
+      client.set(key, value, 'EX', time, (err, result) => {
+        console.log('client.set -> err', err);
+      });
+      // client.set(key, value);
+      // client.expire(key, time);
     } else {
-      client.set(key, value)
+      client.set(key, value);
     }
   } else if (typeof value === 'object') {
+    // { key1: value1, key2: value2}
+    // Object.keys(value) => [key1, key2]
+    // eslint-disable-next-line
     Object.keys(value).forEach((item) => {
-      client.hset(key,item, value[item],redis.print)
-    })
+
+    });
   }
-  
-}
+  // client.quit()
+};
 
 // const {promisify} = require('util');
 // const getAsync = promisify(client.get).bind(client);
 
-const getValue = async (key) => {
-  return client.getAsync(key)
-}
+const getValue = (key) => {
+  if (!client.connected) {
+    client = promisifyAll(createClient(options));
+  }
+  return client.getAsync(key);
+};
 
-const getHValue = async (key) => {
+const getHValue = (key) => {
   // v8 Promisify method use util, must node > 8
   // return promisify(client.hgetall).bind(client)(key)
-  
+
   // bluebird async
-  return client.hgetallAsync(key)
-  // return await client.hgetall(key)
-}
+  return client.hgetallAsync(key);
+};
 
 const delValue = (key) => {
   client.del(key, (err, res) => {
     if (res === 1) {
-      console.log('delete successfully')
+      console.log('delete successfully');
     } else {
-      console.log('delete redis key error:' + err)
+      console.log('delete redis key error:' + err);
     }
-  })
-}
+  });
+};
 
-export {
-  client,
-  setValue,
-  getValue,
-  getHValue,
-  delValue
-}
+export { client, setValue, getValue, getHValue, delValue };

@@ -1,9 +1,9 @@
-const webpackMerge = require('webpack-merge')
+const {merge} = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.config.base')
 
 const TerserWebpackPlugin = require('terser-webpack-plugin')
 
-const webpackConfig = webpackMerge(baseWebpackConfig, {
+const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
   stats: { children: false, warnings: false },
   optimization: {
