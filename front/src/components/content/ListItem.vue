@@ -3,7 +3,7 @@
     <ul class="fly-list">
       <li v-for="(item, index) in items" :key="`listItem${index}`">
         <a href="user/home.html" class="fly-avatar">
-          <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="贤心">
+          <img :src="item.uid.pic" :alt="item.uid.name">
         </a>
         <h2>
           <a class="layui-badge">{{item.catalogStr}}</a>
@@ -18,7 +18,7 @@
           <span>{{item.created | moment }}</span>
 
           <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> {{item.fav}}</span>
-          <span class="layui-badge fly-badge-accept layui-hide-xs" v-show="item.status !== 0">已结</span>
+          <span class="layui-badge fly-badge-accept layui-hide-xs" v-show="item.isEnd !== '0'">已结</span>
           <span class="fly-list-nums">
             <i class="iconfont icon-pinglun1" title="回答"></i> {{item.answer}}
           </span>
@@ -40,9 +40,9 @@
 </template>
 
 <script>
-  import moment from 'moment';
-  import 'moment/locale/zh-cn';
-  import _ from 'lodash';
+  // import moment from 'dayjs';
+  // import 'dayjs/locale/zh-cn';
+  // import _ from 'lodash';
   export default {
     name: 'ListItemCom',
     props: {
@@ -61,7 +61,7 @@
     },
     computed: {
       items () {  // 关联list，监听list内容变化
-        _.map((this.list), (item) => {
+        this.list.map((item) => {
           switch (item.catalog) {
             case 'ask':
               item.catalogStr = '提问';
@@ -89,19 +89,18 @@
       more () {
         this.$emit('next-page');
       }
-    },
-    filters: {
-      moment (date) {
-        moment.suppressDeprecationWarnings = true;
-        // 超过7天，显示日期
-        if (moment(date).isBefore(moment().subtract(7, 'days'))) {
-          return moment(date).format('YYYY-MM-DD');
-        } else {
-          // xx小时前，X天前
-          return moment(date).from(moment());
-        }
-      }
     }
+    // filters: {
+    //   moment (date) {
+    //     // 超过7天，显示日期
+    //     if (moment(date).isBefore(moment().subtract(7, 'days'))) {
+    //       return moment(date).format('YYYY-MM-DD');
+    //     } else {
+    //       // xx小时前，X天前
+    //       return moment(date).from(moment());
+    //     }
+    //   }
+    // }
 
   };
 </script>

@@ -1,8 +1,7 @@
 <template>
   <div class="layui-container fly-marginTop">
     <div
-      class="fly-panel fly-panel-user"
-      pad20>
+      class="fly-panel fly-panel-user" pad20>
       <div
         class="layui-tab layui-tab-brief"
         lay-filter="user">
@@ -258,9 +257,7 @@ export default {
               this.$refs.observer.reset();
             });
             this.$alert(res.msg);
-            setTimeout(() => {
-              this.$router.push('/login');
-            }, 3000);
+            this.$router.push('/login');
           } else if (res.code === 10002) {
             this.$refs.codeField.setErrors([
               res.msg

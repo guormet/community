@@ -1,45 +1,45 @@
-const path = require('path')
+const path = require('path');
 
-const utils = require('./utils')
-const webpack = require('webpack')
-const nodeExcternals = require('webpack-node-externals')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const utils = require('./utils');
+const webpack = require('webpack');
+const nodeExcternals = require('webpack-node-externals');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const webpackconfig = {
   target: 'node',
   entry: {
-    server: path.join(utils.APP_PATH, 'index.js'),
+    server: path.join(utils.APP_PATH, 'index.js')
   },
   resolve: {
-    ...utils.getWebpackResolveConfig(),
+    ...utils.getWebpackResolveConfig()
   },
   output: {
     filename: '[name].bundle.js',
-    path: utils.DIST_PATH,
+    path: utils.DIST_PATH
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         use: {
-          loader: 'babel-loader',
+          loader: 'babel-loader'
         },
-        exclude: [path.join(__dirname, '/node_modules')],
-      },
-    ],
+        exclude: [ path.join(__dirname, '/node_modules') ]
+      }
+    ]
   },
-  externals: [nodeExcternals()],
+  externals: [ nodeExcternals() ],
   plugins: [
     new CleanWebpackPlugin(),
-    new webpack.EnvironmentPlugin(['NODE_ENV'])
+    new webpack.EnvironmentPlugin([ 'NODE_ENV' ])
   ],
   node: {
     global: true,
     __filename: true,
-    __dirname: true,
-  },
-}
+    __dirname: true
+  }
+};
 
 // console.log(webpackconfig)
 
-module.exports = webpackconfig
+module.exports = webpackconfig;

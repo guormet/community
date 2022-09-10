@@ -1,5 +1,5 @@
 // import redis from 'redis'
-import {createClient } from 'redis';
+import { createClient } from 'redis';
 import { promisifyAll } from 'bluebird';
 import config from './index';
 // import log4js from '@/config/Log4j'

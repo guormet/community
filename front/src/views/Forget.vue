@@ -1,8 +1,7 @@
 <template>
   <div class="layui-container fly-marginTop">
     <div 
-      class="fly-panel fly-panel-user"
-      pad20>
+      class="fly-panel fly-panel-user" pad20>
       <div
         class="layui-tab layui-tab-brief"
         lay-filter="user">

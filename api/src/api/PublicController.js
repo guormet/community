@@ -2,10 +2,9 @@ import svgCaptcha from 'svg-captcha';
 import { setValue } from '../config/RedisConfig';
 
 class PublicController {
-  constructor () {}
   /**
    * 获取验证码
-   * @param {} ctx 
+   * @param {} ctx
    */
   async getCaptcha (ctx) {
     const body = ctx.request.query;
@@ -19,34 +18,11 @@ class PublicController {
     });
     // 保存图片验证码数据，设置超时时间 60s
     setValue(body.sid, newCaptca.text, 60);
-   
+
     ctx.body = {
       code: 200,
       data: newCaptca.data
     };
-  }
-  /**
-   * 温馨提醒
-   * @param {} ctx 
-   */
-  async tips (ctx) {
-    ctx.body = {
-      code: 200,
-      data: [],
-      msg: ''
-    };
-  }
-  /**
-   * 友情链接
-   * @param {} ctx 
-   */
-  async links (ctx) {
-    ctx.body = {
-      code: 200,
-      data: [],
-      msg: ''
-    };
-
   }
 }
 

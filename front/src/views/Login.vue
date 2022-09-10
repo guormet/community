@@ -1,8 +1,7 @@
 <template>
   <div class="layui-container fly-marginTop">
     <div
-      class="fly-panel fly-panel-user"
-      pad20>
+      class="fly-panel fly-panel-user" pad20>
       <div
         class="layui-tab layui-tab-brief"
         lay-filter="user">
@@ -22,7 +21,7 @@
           style="padding: 20px 0;">
           <validation-observer
             ref="observer"
-            v-slot="{ validate }">            
+            v-slot="{ validate }">
             <div class="layui-tab-item layui-show">
               <div class="layui-form layui-form-pane">
                 <form method="post">
@@ -194,13 +193,16 @@ export default {
           this.username = '';
           this.password = '';
           this.code = '';
+          this.$store.commit('setUserInfo', res.data);
+          this.$store.commit('setIsLogin', true);
+          this.$store.commit('setToken', res.token);
           requestAnimationFrame(() => {
             this.$refs.observer.reset();
+            this.$router.push({name: 'index'});
           });
         } else if (res.code === 10002) {
-          this.$refs.codefield.setErrors([
-            res.msg
-          ]);
+          this.$refs.codefield.setErrors([ res.msg ]);
+          this._getCode();
         } else {
           this.$alert(res.msg);
         }

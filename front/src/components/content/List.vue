@@ -47,7 +47,7 @@ import ListItem from './ListItem';
       isRepeat: false,
       isEnd: false,
       current: '',
-      status: '',
+      status: '', // 0 未结 1 已结
       tag: '',
       sort: 'created',
       page: 0,

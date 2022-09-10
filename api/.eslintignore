@@ -1,0 +1,11 @@
+/dist
+/node_modules
+/package.json
+/pakage-lock.json
+/babel.config.js
+/postcss.config.js
+/README.md
+/yarn.lock
+/.browserslistrc
+/.gitignore
+/public

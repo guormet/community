@@ -14,14 +14,14 @@ const getList = (option) => {
  * @returns 温馨提示内容
  */
 const getTips = () => {
-  return axios.get('/public/tips');
+  return axios.get('/public/getTips');
 };
 /**
  * 友情链接
  * @returns 友情链接内容
  */
 const getLinks = () => {
-  return axios.get('/public/links');
+  return axios.get('/public/getLinks');
 };
 /**
  * 本周热议

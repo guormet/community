@@ -1,6 +1,6 @@
 export default (ctx, next) => {
   return next().catch((err) => {
-    if (401 == err.status) {
+    if (err.status === 401) {
       ctx.status = 401;
       ctx.body = {
         code: 401,
@@ -11,7 +11,7 @@ export default (ctx, next) => {
       ctx.body = Object.assign({
         code: 500,
         msg: err.message
-      }, process.env.NODE_ENV === 'development' ? {stack: err.stack} : {});
+      }, process.env.NODE_ENV === 'development' ? { stack: err.stack } : {});
     }
   });
 };

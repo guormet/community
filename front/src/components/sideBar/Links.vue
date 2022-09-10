@@ -4,7 +4,7 @@
       <h3 class="fly-panel-title">友情链接</h3>
       <dl class="fly-panel-main">
         <dd v-for="(item, index) in list" :key="`links${index}`">
-          <a href="item.link" target="_blank">{{item.title}}</a></dd>
+          <a :href="item.link" target="_blank">{{item.title}}</a></dd>
         <dd><a @click.prevent="applyLink" class="fly-link">申请友链</a></dd>
       </dl>
     </div>

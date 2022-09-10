@@ -1,6 +1,8 @@
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+
 module.exports = {
   devServer: {
-    proxy: 'http://localhost:36742'
+    proxy: 'http://localhost:3000'
   },
   chainWebpack: (config) => {
     config.module
@@ -18,5 +20,10 @@ module.exports = {
         };
         return options;
       });
+  },
+  configureWebpack: {
+    plugins: [        
+      new NodePolyfillPlugin()
+    ]
   }
 };

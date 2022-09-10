@@ -20,7 +20,7 @@
   import Ads from '@/components/sideBar/Ads';
   import HotList from '@/components/sideBar/HotList';
   import Links from '@/components/sideBar/Links';
-  import Sign from '@/components/sideBar/Sign';
+  import Sign from '@/components/sideBar/sign';
   import Tips from '@/components/sideBar/Tips';
   import List from '@/components/content/List';
   import Top from '@/components/content/Top';

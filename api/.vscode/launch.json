@@ -12,6 +12,7 @@
       "program": "${workspaceFolder}/src/index.js",
       "restart": true,
       "console": "integratedTerminal",
+      "runtimeVersion": "16.14.0",
       "internalConsoleOptions": "neverOpen",
       "runtimeArgs": ["--exec", "babel-node"]
     }
