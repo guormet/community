@@ -6,13 +6,13 @@ const privateIv = 'phone18377330701'; // 16
 const publicKey = 'qq1445190395abcd'; // 16
 const publicIv = 'phone17620410701'; // 16
 
-async function aesEncrypt (content) {
+async function aesEncrypt (content) { // 私钥加密pwd
   const encrypted = await crypto.AES.encrypt(content, crypto.enc.Utf8.parse(privateKey), { iv: crypto.enc.Utf8.parse(privateIv) });
 
   return crypto.enc.Base64.stringify(encrypted.ciphertext);
 }
 
-async function aesDecrypt (content, type) {
+async function aesDecrypt (content, type) { // 公钥解密传入的pwd，私钥解密在库的pwd
   let key = '';
   let iv = '';
   if (type === 1) {

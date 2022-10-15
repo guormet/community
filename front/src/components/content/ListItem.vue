@@ -23,7 +23,7 @@
             <i class="iconfont icon-pinglun1" title="回答"></i> {{item.answer}}
           </span>
         </div>
-        <div class="fly-list-badge" v-show="item.tags.length">
+        <div class="fly-list-badge" v-show="item.tags.length > 0 && item.tags[0].name !== ''">
           <span class="layui-badge" v-for="(tag, index) in item.tags" :key="`tag${index}`" :class="tag.class">{{tag.name}}</span>
         </div>
       </li>
@@ -40,9 +40,12 @@
 </template>
 
 <script>
-  // import moment from 'dayjs';
-  // import 'dayjs/locale/zh-cn';
+  import moment from 'dayjs';
+  import relativeTime from 'dayjs/plugin/relativeTime';
+  import 'dayjs/locale/zh-cn';
   // import _ from 'lodash';
+
+  moment.extend(relativeTime);
   export default {
     name: 'ListItemCom',
     props: {
@@ -89,18 +92,18 @@
       more () {
         this.$emit('next-page');
       }
+    },
+    filters: {
+      moment (date) {
+        // 超过7天，显示日期
+        if (moment(date).isBefore(moment().subtract(7, 'days'))) {
+          return moment(date).format('YYYY-MM-DD');
+        } else {
+          // xx小时前，X天前
+          return moment(date).locale('zh-cn').from(moment());
+        }
+      }
     }
-    // filters: {
-    //   moment (date) {
-    //     // 超过7天，显示日期
-    //     if (moment(date).isBefore(moment().subtract(7, 'days'))) {
-    //       return moment(date).format('YYYY-MM-DD');
-    //     } else {
-    //       // xx小时前，X天前
-    //       return moment(date).from(moment());
-    //     }
-    //   }
-    // }
 
   };
 </script>

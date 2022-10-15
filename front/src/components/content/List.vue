@@ -32,13 +32,18 @@ import ListItem from './ListItem';
     current (newVal, oldVal) {
       this.init();
     },
+    $route: {
     // eslint-disable-next-line no-unused-vars
-    $route (newVal, oldVal) {
-      let catalog = newVal.params['catalog'];
-      if (typeof catalog !== 'undefined' && catalog !== '') {
-        this.catalog = catalog;
-      }
-      this.init();
+      handler (newVal, oldVal) {
+        console.log('$route -> newval', newVal);
+        let catalog = newVal.params['catalog'];
+        if (typeof catalog !== 'undefined' && catalog !== '') {
+          this.catalog = catalog;
+        }
+        this.init();
+      },
+      deep: true
+      
     }
   },
   data () { 

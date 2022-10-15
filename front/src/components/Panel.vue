@@ -9,7 +9,7 @@
             </a>
           </router-link>
           <router-link v-for="(item, index) in list" :key="'panel' + index" tag="li" :to="item.path">
-            <a href="/">
+            <a href="jie/index.html">
               {{item.name}}
               <span class="layui-badge-dot" v-if="item.isNew"></span>
             </a>
@@ -23,10 +23,10 @@
         </ul>
         <div class="fly-column-right layui-hide-xs">
           <span class="fly-search"><i class="layui-icon"></i></span>
-          <a href="jie/add.html" class="layui-btn">发表新帖</a>
+          <router-link class="layui-btn" to="add"> 发表新帖</router-link>
         </div>
         <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;">
-          <a href="jie/add.html" class="layui-btn">发表新帖</a>
+          <router-link class="layui-btn" to="add"> 发表新帖</router-link>
         </div>
       </div>
     </div>

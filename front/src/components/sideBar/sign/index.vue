@@ -7,7 +7,7 @@
         <a href="javascript:;" class="fly-link" id="LAY_signinHelp" @click="showInfo">说明</a>
         <i class="fly-mid"></i>
         <a href="javascript:;" class="fly-link" id="LAY_signinTop" @click="showTop">活跃榜<span class="layui-badge-dot"></span></a>
-        <span class="fly-signin-days">已连续签到<cite>{{count}}</cite>天</span>
+        <span class="fly-signin-days" v-if="isSign || isLogin">已连续签到<cite>{{count}}</cite>天</span>
       </div>
       <div class="fly-panel-main fly-signin-main">
         <template v-if="!isSign">
@@ -43,7 +43,6 @@
     },
     data () {
       return {
-        isLogin: this.$store.state.isLogin ? this.$store.state.isLogin : false,
         isShow: false,
         showList: false,
         current: 0,
@@ -53,6 +52,9 @@
       };
     },
     computed: {
+      isLogin () {
+        return this.$store.state.isLogin ? this.$store.state.isLogin : false;
+      },
       favs () {
         let count = parseInt(this.count) + 1;
         let result = 0;
@@ -102,7 +104,7 @@
     },
     methods: {
       countDown () {
-        let endTime = moment(this.$store.state.userInfo.lastSign).add('1', 'd').toISOString();
+        let endTime = moment(moment().format('YYYY-MM-DD 00:00:00')).add('1', 'd').toISOString();
         let duration = moment.duration(moment(endTime) - moment());
         let hours = duration.hours();
         let minutes = duration.minutes() % 60 < 10 ? '0' + (duration.minutes() % 60) : duration.minutes() % 60;
@@ -117,6 +119,7 @@
       sign () {
         if (!this.isLogin) {
           this.$pop('shake', '请先登录');
+          return;
         }
         userSign().then((res) => {
           let user = this.$store.state.userInfo;

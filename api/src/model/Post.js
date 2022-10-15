@@ -17,19 +17,27 @@ const PostSchema = new Schema({
   // 帖子积分
   fav: { type: String },
   // 0-未结束，1-已结贴
-  isEnd: { type: String },
+  isEnd: { type: String, default: '0' },
   // 阅读记数
-  reads: { type: Number },
+  reads: { type: Number, default: 0 },
   // 回答记数
-  answer: { type: Number },
+  answer: { type: Number, default: 0 },
   // 0-打开回复，1-关闭回复
-  status: { type: String },
+  status: { type: String, default: '0' },
   // 0-未置顶，1-已置顶
-  isTop: { type: String },
+  isTop: { type: String, default: '0' },
   // 置顶排序
-  sort: { type: String },
+  sort: { type: String, default: '100' },
   // 文章的标签, 精华，加精, etc
-  tags: { type: Array }
+  tags: {
+    type: Array,
+    default: [
+      // {
+      //   name: '',
+      //   class: ''
+      // }
+    ]
+  }
 });
 PostSchema.pre('save', function (next) {
   this.created = moment().format('YYYY-MM-DD HH:mm:ss');

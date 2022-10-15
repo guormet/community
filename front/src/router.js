@@ -22,6 +22,11 @@ const Password = () => import(/* webpackChunkName: 'password' */ './components/u
 const PicUpload = () => import(/* webpackChunkName: 'pic-upload' */ './components/user/common/PicUpload.vue');
 const MyCollection = () => import(/* webpackChunkName: 'My-collection' */ './components/user/common/MyCollection.vue');
 const MyPost = () => import(/* webpackChunkName: 'My-post' */ './components/user/common/MyPost.vue');
+const NotFound = () => import(/* webpackChunkName: 'not-found' */ './views/NotFound.vue');
+const Confirm = () => import(/* webpackChunkName: 'confirm' */ './views/Confirm.vue');
+const Reset = () => import(/* webpackChunkName: 'reset' */ './views/Reset.vue');
+const Add = () => import(/* webpackChunkName: 'add' */ './components/content/Add.vue');
+const Detail = () => import(/* webpackChunkName: 'detail' */ './components/content/Detail.vue');
 
 Vue.use(Router);
 
@@ -51,6 +56,16 @@ const router = new Router({
       component: Login
     },
     {
+      path: '/confirm',
+      name: 'confirm',
+      component: Confirm
+    },
+    {
+      path: '/reset',
+      name: 'reset',
+      component: Reset
+    },
+    {
       path: '/reg',
       name: 'reg',
       component: Reg,
@@ -66,6 +81,17 @@ const router = new Router({
       path: '/forget',
       name: 'forget',
       component: Forget
+    },
+    {
+      path: '/add',
+      name: 'add',
+      component: Add,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/detail',
+      name: 'detail',
+      component: Detail
     },
     {
       path: '/user/:uid',
@@ -137,6 +163,14 @@ const router = new Router({
           component: UserOthers
         }
       ]
+    },
+    {
+      path: '/404',
+      component: NotFound
+    },
+    {
+      path: '*',
+      redirect: '/404'
     }
   ]
 });
@@ -159,6 +193,7 @@ router.beforeEach((to, from, next) => {
     }
     
   }
+
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     const isLogin = store.state.isLogin;
     // 需要用户登录的页面进行区别

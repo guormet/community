@@ -190,12 +190,14 @@ export default {
       })
       .then((res) => {
         if (res.code === 200) {
-          this.username = '';
-          this.password = '';
-          this.code = '';
+          res.data.username = this.username;
           this.$store.commit('setUserInfo', res.data);
           this.$store.commit('setIsLogin', true);
           this.$store.commit('setToken', res.token);
+          this.username = '';
+          this.password = '';
+          this.code = '';
+          
           requestAnimationFrame(() => {
             this.$refs.observer.reset();
             this.$router.push({name: 'index'});

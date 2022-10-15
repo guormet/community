@@ -21,11 +21,10 @@
           </a>
         </li>
         <li class="layui-nav-item">
-          <a
-            href="http://www.layui.com/"
-            target="_blank">
+          <router-link
+            to="/user12313">
             <i class="iconfont icon-ui" />采用框架
-          </a>
+          </router-link>
         </li>
       </ul>
 
@@ -136,7 +135,9 @@ export default {
         this.$store.commit('setToken', '');
         this.$store.commit('setUserInfo', {});
         this.$store.commit('setIsLogin', false);
-        this.$router.push('/');
+        this.$router.push({name: 'index'}, () => {
+        // do something
+        });
       }, () => {
         // do something
       });

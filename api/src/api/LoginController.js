@@ -7,6 +7,8 @@ import { aesDecrypt, aesEncrypt } from '@/common/crypto';
 import errorCode from '@/common/ErrorCode';
 import User from '@/model/User';
 import SignRecord from '@/model/SignRecord';
+import { setValue, getValue } from '@/config/RedisConfig';
+import { v4 as uuidv4 } from 'uuid';
 class LoginController {
   /**
    * 找回密码接口（发送邮件）
@@ -14,16 +16,35 @@ class LoginController {
    */
   async forget (ctx) {
     const { body } = ctx.request;
-    console.log(body);
+    const user = await User.findOne({ username: body.username });
+    if (!user) {
+      ctx.body = {
+        code: 404,
+        msg: '请检查账号！'
+      };
+      return;
+    }
     try {
+      const key = uuidv4();
+      setValue(
+        key,
+        jsonwebtoken.sign({ _id: user._id }, config.JWT_SECRET, {
+          expiresIn: '30m'
+        }),
+        30 * 60
+      );
       // body.username -> database -> email
       const result = await send({
-        code: '1234',
+        type: 'reset',
+        data: {
+          key,
+          username: body.username
+        },
         expire: moment()
           .add(30, 'minutes')
           .format('YYYY-MM-DD HH:mm:ss'),
         email: body.username,
-        user: 'Brian'
+        user: user.name ? user.name : body.username
       });
       ctx.body = {
         code: 200,
@@ -144,6 +165,56 @@ class LoginController {
       ctx.body = {
         code: 10002,
         msg: errorCode[10002]
+      };
+    }
+  }
+
+  /**
+   * 密码重置
+   * @param {*} ctx
+   * @returns
+   */
+  async reset (ctx) {
+    const { body } = ctx.request;
+    const sid = body.sid;
+    const code = body.code;
+    const msg = {};
+    // 验证图片验证码的时效性、正确性
+    const result = await checkCode(sid, code);
+    if (!body.key) {
+      ctx.body = {
+        code: 10202,
+        msg: errorCode[10202]
+      };
+      return;
+    }
+    if (!result) {
+      msg.code = [ errorCode[9000] ];
+      ctx.body = {
+        code: 500,
+        msg
+      };
+      return;
+    }
+    const token = await getValue(body.key);
+    if (token) {
+      const inputPwd = await aesDecrypt(body.password, 1);
+      const newpasswd = await aesEncrypt(inputPwd);
+      console.log(body.username);
+      await User.updateOne(
+        { username: body.username },
+        {
+          password: newpasswd
+        }
+      );
+      ctx.body = {
+        code: 200,
+        msg: '更新用户密码成功！'
+      };
+    } else {
+      ctx.body = {
+        code: 10203,
+        msg: errorCode[10203]
       };
     }
   }
