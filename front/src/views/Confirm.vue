@@ -1,6 +1,6 @@
 <template>
   <div class="layui-container flex">
-    <div class="layui-row font pb30">确定更新账号为：{{username}}吗？</div>
+    <div class="layui-row font pb3">确定更新账号为：{{username}}吗？</div>
     <div class="layui-row">
       <button
         type="button"

@@ -40,8 +40,9 @@
             <!-- method2: 组件级权限控制 richtext -->
             <div v-hasRole="'admin'">
               <div class="fly-admin-box" data-id="123">
+                <!-- <span
+                  v-hasPermission="['get','delete']" -->
                 <span
-                  v-hasPermission="['get','delete']"
                   class="layui-btn layui-btn-xs jie-admin"
                   type="del">删除</span>
 
@@ -89,7 +90,7 @@
                 <cite>{{page.uid? page.uid.name: 'ktn'}}</cite>
                 <!-- <i class="iconfont icon-renzheng" title="认证信息："></i> -->
                 <i
-                  class="layui-badge fly-badge-vip mr10"
+                  class="layui-badge fly-badge-vip mr1"
                   v-if="page.uid && page.uid.isVip !== '0'? page.uid.isVip : false">VIP{{page.uid.isVip}}</i>
               </a>
               <span>{{page.created | moment}}</span>
@@ -98,7 +99,7 @@
               <span style="padding-right: 10px; color: #FF7200">悬赏：{{page.fav}}</span>
             </div>
           </div>
-          <div class="layui-btn-container fly-detail-admin pt10">
+          <div class="layui-btn-container fly-detail-admin pt1">
             <router-link
               class="layui-btn layui-btn-sm jie-admin"
               :to="{name: 'edit', params: { tid: tid, page: page } }"
@@ -126,7 +127,7 @@
                 <div class="fly-detail-user">
                   <router-link
                     class="fly-link"
-                    :to="{name: 'home', params: {uid: item.cuid ? item.cuid._id : ''}}">
+                    :to="{name: 'home', params: {uid: item.cuid ? item.cuid._id : ''} }">
                     <cite>{{item.cuid? item.cuid.name :'ktn'}}</cite>
                     <i
                       v-if="item.cuid && item.cuid.isVip !=='0'?item.cuid.isVip : false "

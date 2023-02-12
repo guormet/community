@@ -10,5 +10,7 @@ router.get('/fav', userController.userSign);
 router.post('/basic', userController.updateUserInfo);
 // 修改密码
 router.post('/change-password', userController.changePasswd);
+// 设置收藏 & 取消收藏
+router.get('/setCollect', userController.setCollect);
 
 export default router;

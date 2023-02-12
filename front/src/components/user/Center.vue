@@ -1,5 +1,5 @@
 <template>
-  <div class="panel main pd20">
+  <div class="panel main pd2">
     <div class="msg">嗨, 欢迎您来到 KTN GO 的大家庭!</div>
     <div class="layui-row layui-col-space20">
       <div class="layui-col-md6">

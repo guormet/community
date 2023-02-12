@@ -1,6 +1,7 @@
 import SignRecord from '@/model/SignRecord';
-import { getJWTPayload } from '@/common/Utils';
 import User from '@/model/User';
+import UserCollect from '../model/UserCollect';
+import { getJWTPayload } from '@/common/Utils';
 import moment from 'dayjs';
 import send from '@/config/MailConfig';
 import { v4 as uuidv4 } from 'uuid';
@@ -171,7 +172,10 @@ class UserController {
     }
   }
 
-  // 更新用户名
+  /**
+   * 更新用户名
+   * @param {*} ctx
+   */
   async updateUsername (ctx) {
     const body = ctx.query;
     if (body.key) {
@@ -190,7 +194,10 @@ class UserController {
     }
   }
 
-  // 修改密码接口
+  /**
+   * 修改密码接口
+   * @param {*} ctx
+   */
   async changePasswd (ctx) {
     const { body } = ctx.request;
     const obj = await getJWTPayload(ctx.header.authorization);
@@ -214,6 +221,37 @@ class UserController {
         code: 9002,
         msg: ErrorCode[9002]
       };
+    }
+  }
+
+  /**
+   * 设置收藏
+   * @param {*} ctx
+   */
+  async setCollect (ctx) {
+    const params = ctx.query;
+    const obj = await getJWTPayload(ctx.header.authorization);
+    if (parseInt(params.isFav)) {
+      // 说明用户已经收藏了帖子
+      await UserCollect.deleteOne({ uid: obj._id, tid: params.tid });
+      ctx.body = {
+        code: 200,
+        msg: '取消收藏成功'
+      };
+    } else {
+      const newCollect = new UserCollect({
+        uid: obj._id,
+        tid: params.tid,
+        title: params.title
+      });
+      const result = await newCollect.save();
+      if (result.uid) {
+        ctx.body = {
+          code: 200,
+          data: result,
+          msg: '收藏成功'
+        };
+      }
     }
   }
 }

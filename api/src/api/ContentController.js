@@ -6,6 +6,8 @@ import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import { checkCode, getJWTPayload } from '@/common/Utils';
 import User from '@/model/User';
+import UserCollect from '@/model/UserCollect';
+import PostHistory from '@/model/PostHistory';
 // // method 1
 // import { dirExists } from '@/common/Utils';
 // method 2
@@ -184,6 +186,125 @@ class ContentController {
         msg: '图片验证码验证失败'
       };
     }
+  }
+
+  // 更新帖子
+  async updatePost (ctx) {
+    const { body } = ctx.request;
+    const sid = body.sid;
+    const code = body.code;
+    // 验证图片验证码的时效性、正确性
+    const result = await checkCode(sid, code);
+    if (result) {
+      const obj = await getJWTPayload(ctx.header.authorization);
+      // 判断帖子作者是否为本人
+      const post = await Post.findOne({ _id: body.tid });
+      // 判断帖子是否结贴
+      if (post.uid === obj._id && post.isEnd === '0') {
+        const result = await Post.updateOne({ _id: body.tid }, body);
+        if (result.acknowledged) {
+          ctx.body = {
+            code: 200,
+            data: result,
+            msg: '更新帖子成功'
+          };
+        } else {
+          ctx.body = {
+            code: 500,
+            data: result,
+            msg: '编辑帖子，更新失败'
+          };
+        }
+      } else {
+        ctx.body = {
+          code: 401,
+          msg: '没有操作的权限'
+        };
+      }
+    } else {
+      // 图片验证码验证失败
+      ctx.body = {
+        code: 500,
+        msg: '图片验证码验证失败'
+      };
+    }
+  }
+
+  async updatePostByTid (ctx) {
+    const { body } = ctx.request;
+    const result = await Post.updateOne({ _id: body._id }, body);
+    if (result.acknowledged) {
+      ctx.body = {
+        code: 200,
+        data: result,
+        msg: '更新帖子成功'
+      };
+    } else {
+      ctx.body = {
+        code: 500,
+        data: result,
+        msg: '编辑帖子，更新失败'
+      };
+    }
+  }
+
+  // 获取文章详情
+  async getPostDetail (ctx) {
+    const params = ctx.query;
+    if (!params.tid) {
+      ctx.body = {
+        code: 500,
+        msg: '文章id为空'
+      };
+      return;
+    }
+    const post = await Post.findByTid(params.tid);
+    if (!post) {
+      ctx.body = {
+        code: 200,
+        data: {},
+        msg: '查询文章详情成功'
+      };
+      return;
+    }
+    let isFav = 0;
+    // 判断用户是否传递Authorization的数据，即是否登录
+    if (
+      typeof ctx.header.authorization !== 'undefined' &&
+      ctx.header.authorization !== ''
+    ) {
+      const obj = await getJWTPayload(ctx.header.authorization);
+      const userCollect = await UserCollect.findOne({
+        uid: obj._id,
+        tid: params.tid
+      });
+      if (userCollect && userCollect.tid) {
+        isFav = 1;
+      }
+      await PostHistory.addOrUpdate(obj._id, params.tid); // 添加浏览记录
+    }
+    const newPost = post.toJSON();
+    newPost.isFav = isFav;
+    // 更新文章阅读记数
+    const result = await Post.updateOne(
+      { _id: params.tid },
+      { $inc: { reads: 1 } }
+    );
+
+    if (post._id && result.acknowledged) {
+      ctx.body = {
+        code: 200,
+        data: newPost,
+        msg: '查询文章详情成功'
+      };
+    } else {
+      ctx.body = {
+        code: 500,
+        msg: '获取文章详情失败'
+      };
+    }
+    // const post = await Post.findOne({ _id: params.tid })
+    // const result = rename(post.toJSON(), 'uid', 'user')
   }
 }
 

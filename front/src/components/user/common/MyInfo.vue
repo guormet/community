@@ -48,8 +48,8 @@
       </div>
       <div class="layui-form-item">
         <label for="L_city" class="layui-form-label">性别</label>
-        <div class="layui-input-inline gray mt10 ml10">
-          <label for="gender1" class="mr10">
+        <div class="layui-input-inline gray mt1 ml1">
+          <label for="gender1" class="mr1">
             <input
               id="gender1"
               type="radio"

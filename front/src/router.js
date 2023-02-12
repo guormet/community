@@ -89,8 +89,9 @@ const router = new Router({
       meta: { requiresAuth: true }
     },
     {
-      path: '/detail',
+      path: '/detail/:tid',
       name: 'detail',
+      props: true,
       component: Detail
     },
     {

@@ -2,19 +2,19 @@
   <div>
     <ul class="fly-list">
       <li v-for="(item, index) in items" :key="`listItem${index}`">
-        <a href="user/home.html" class="fly-avatar">
+        <router-link class="fly-avatar" :to="{name: 'home', params: {uid: item.uid._id}}" link>
           <img :src="item.uid.pic" :alt="item.uid.name">
-        </a>
+        </router-link>
         <h2>
           <a class="layui-badge">{{item.catalogStr}}</a>
-          <a href="jie/detail.html">{{item.title}}</a>
+          <router-link :to="{name: 'detail', params: {tid: item._id}}">{{item.title}}</router-link>
         </h2>
         <div class="fly-list-info">
-          <a href="user/home.html" link>
+          <router-link :to="{name: 'home', params: {uid: item.uid._id}}" link>
             <cite>{{item.uid.name}}</cite>
             <!--<i class="iconfont icon-renzheng" title="认证信息：XXX"></i>-->
             <i class="layui-badge fly-badge-vip" v-if="item.uid.isVip !== '0'">{{`VIP${item.uid.isVip}`}}</i>
-          </a>
+          </router-link>
           <span>{{item.created | moment }}</span>
 
           <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> {{item.fav}}</span>
@@ -40,12 +40,12 @@
 </template>
 
 <script>
-  import moment from 'dayjs';
-  import relativeTime from 'dayjs/plugin/relativeTime';
-  import 'dayjs/locale/zh-cn';
+  // import moment from 'dayjs';
+  // import relativeTime from 'dayjs/plugin/relativeTime';
+  // import 'dayjs/locale/zh-cn';
   // import _ from 'lodash';
 
-  moment.extend(relativeTime);
+  // moment.extend(relativeTime);
   export default {
     name: 'ListItemCom',
     props: {
@@ -92,18 +92,18 @@
       more () {
         this.$emit('next-page');
       }
-    },
-    filters: {
-      moment (date) {
-        // 超过7天，显示日期
-        if (moment(date).isBefore(moment().subtract(7, 'days'))) {
-          return moment(date).format('YYYY-MM-DD');
-        } else {
-          // xx小时前，X天前
-          return moment(date).locale('zh-cn').from(moment());
-        }
-      }
     }
+    // filters: {
+    //   moment (date) {
+    //     // 超过7天，显示日期
+    //     if (moment(date).isBefore(moment().subtract(7, 'days'))) {
+    //       return moment(date).format('YYYY-MM-DD');
+    //     } else {
+    //       // xx小时前，X天前
+    //       return moment(date).locale('zh-cn').from(moment());
+    //     }
+    //   }
+    // }
 
   };
 </script>

@@ -80,9 +80,17 @@ const dirExists = async (dir) => {
     return false;
   }
 };
+const rename = (obj, key, newKey) => {
+  if (Object.keys(obj).indexOf(key) !== -1) {
+    obj[newKey] = obj[key];
+    delete obj[key];
+  }
+  return obj;
+};
 export {
   checkCode,
   getJWTPayload,
   generateToken,
-  dirExists
+  dirExists,
+  rename
 };

@@ -16,7 +16,7 @@
           <div class="layui-tab-content">
             <ul class="layui-tab-item layui-show">
               <li v-for="(item, index) in list" :key="`sign${index}`">
-                <img :src="item.avatar" alt="" class="mr10">
+                <img :src="item.avatar" alt="" class="mr1">
                 <cite class="fly-link">{{item.name}}</cite>
                 <span class="fly-grey" v-if="current !== 2">
                   签到于{{item.created}}
