@@ -1,11 +1,11 @@
 import path from 'path';
 
-const DB_URL = 'mongodb://test:123456@120.77.34.116:27017/testdb';
+const DB_URL = 'mongodb://test:111111@192.168.56.1:27017/testdb';
 
 const REDIS = {
-  host: '120.77.34.116',
+  host: '192.168.56.1',
   port: 15001,
-  password: '123456'
+  password: '111111'
 };
 /**
  * https://jwt.io/

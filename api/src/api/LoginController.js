@@ -14,7 +14,7 @@ class LoginController {
    * 找回密码接口（发送邮件）
    * @param {} ctx
    */
-  async forget (ctx) {
+  async forget(ctx) {
     const { body } = ctx.request;
     const user = await User.findOne({ username: body.username });
     if (!user) {
@@ -60,7 +60,7 @@ class LoginController {
    * 登录接口
    * @param {} ctx
    */
-  async login (ctx) {
+  async login(ctx) {
     const { body } = ctx.request;
     const code = body.code;
     const sid = body.sid;
@@ -74,7 +74,7 @@ class LoginController {
       const enPwd = await aesDecrypt(user.password, 0);
       if (inputPwd === enPwd) { // 用户名密码校验通过
         const userObj = user.toJSON();
-        const arr = [ 'password', 'username', 'roles' ];
+        const arr = ['password', 'username', 'roles'];
         arr.map((item) => {
           delete userObj[item];
           return item;
@@ -87,7 +87,7 @@ class LoginController {
         if (signRecord !== null && moment(signRecord.created).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')) {
           userObj.isSign = true;
         }
-        userObj.lastSign = signRecord.created;
+        userObj.lastSign = signRecord ? signRecord.created : new Date();
         ctx.body = {
           code: 200,
           data: userObj,
@@ -111,7 +111,7 @@ class LoginController {
    * 注册接口
    * @param {} ctx
    */
-  async reg (ctx) {
+  async reg(ctx) {
     const { body } = ctx.request;
     const code = body.code;
     const sid = body.sid;
@@ -174,7 +174,7 @@ class LoginController {
    * @param {*} ctx
    * @returns
    */
-  async reset (ctx) {
+  async reset(ctx) {
     const { body } = ctx.request;
     const sid = body.sid;
     const code = body.code;
@@ -189,7 +189,7 @@ class LoginController {
       return;
     }
     if (!result) {
-      msg.code = [ errorCode[9000] ];
+      msg.code = [errorCode[9000]];
       ctx.body = {
         code: 500,
         msg
