@@ -19,7 +19,7 @@
 <script>
   export default {
     name: 'LinkAddCom',
-    props: [ 'isShow' ],
+    props: ['isShow'],
     data () {
       return {
         link: ''

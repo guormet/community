@@ -13,12 +13,15 @@
               {{item.name}}
               <span class="layui-badge-dot" v-if="item.isNew"></span>
             </a>
-          </router-link>
-
+          </router-link>         
           <!-- 用户登入后显示 -->
           <template v-if="isLogin">
-            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/">我发表的贴</a></li>
-            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/">我收藏的贴</a></li>
+            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block">
+              <router-link :to="{name: 'myPost'}">我发表的贴</router-link>
+            </li>
+            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block">
+              <router-link :to="{name: 'myCollection'}">我收藏的贴</router-link>
+            </li>
           </template>
         </ul>
         <div class="fly-column-right layui-hide-xs">

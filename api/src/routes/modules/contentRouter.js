@@ -7,7 +7,9 @@ router.prefix('/content');
 
 // 上传图片
 router.post('/upload', contentController.uploadImg);
-// 上传图片
+// 发帖
 router.post('/add', contentController.addPost);
+// 更新帖子
+router.post('/update', contentController.updatePost)
 
 export default router;

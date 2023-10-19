@@ -94,7 +94,7 @@ export default {
     return {
       isSelect: false,
       optIndex: 0,
-      options: [ 10, 20, 30, 50, 100 ],
+      options: [10, 20, 30, 50, 100],
       pages: [],
       limit: 10
     };

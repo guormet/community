@@ -2,7 +2,7 @@
   <div class="layui-container fly-marginTop fly-user-main">
     <ul class="layui-nav layui-nav-tree" lay-filter="test">
       <li class="layui-nav-item" v-for="(item, index) in list" :key="`center${index}`">
-        <router-link :to="{name: item.link}" :active-class="item.activeClass">
+        <router-link :to="{name: item.link, params: {'uid': userInfo._id}}" :active-class="item.activeClass">
           <i class="layui-icon " :class="item.icon"></i>{{item.name}}
         </router-link>
       </li>
@@ -51,6 +51,11 @@
           }
         ]
       };
+    },
+    computed: {
+      userInfo () {
+        return this.$store.state.userInfo;
+      }
     }
   };
 </script>

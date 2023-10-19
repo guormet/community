@@ -15,7 +15,7 @@ export default {
   'hasRole': {
     // eslint-disable-next-line no-unused-vars
     inserted: function (el, binding, vnode) {
-      let roles = store.state.userInfo.roles || [ 'user' ];
+      let roles = store.state.userInfo.roles || ['user'];
       if (!roles.includes(binding.value)) {
         el.parentNode.removeChild(el);
       }

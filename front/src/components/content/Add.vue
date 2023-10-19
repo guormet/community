@@ -143,7 +143,7 @@
   import Editor from '../modules/editor/Index';
   export default {
     name: 'AddPage',
-    mixins: [ CodeMix ],
+    mixins: [CodeMix],
     components: {
       Editor
     },
@@ -175,7 +175,7 @@
             value: 'advise'
           }
         ],
-        favList: [ 20, 30, 50, 60, 80 ],
+        favList: [20, 30, 50, 60, 80],
         content: '',
         title: ''
       };

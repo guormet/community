@@ -16,7 +16,7 @@
   import { escapeHtml } from '@/utils/escapeHtml';
   export default {
     name: 'PreviewCom',
-    props: [ 'isShow', 'content' ],
+    props: ['isShow', 'content'],
     watch: {
       // eslint-disable-next-line no-unused-vars
       isShow (newval, oldval) {

@@ -27,10 +27,8 @@ import qs from 'qs';
    * @param {} data 
    * @returns 
    */
-  const changePasswd = (data) => axios.post('/user/change-password', data);
+  const changePasswd = (data) => axios.post('/user/change-password', data);   
 
-   
-   
   // 设置收藏 & 取消收藏
   const addCollect = (data) => axios.get('/user/setCollect?' + qs.stringify(data));
 

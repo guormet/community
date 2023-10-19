@@ -15,7 +15,7 @@ const UserMsg = () => import(/* webpackChunkName: 'user-msg' */ './components/us
 const UserOthers = () => import(/* webpackChunkName: 'user-others' */ './components/user/Others.vue');
 const UserSettings = () => import(/* webpackChunkName: 'user-settings' */ './components/user/Settings.vue');
 const UserPosts = () => import(/* webpackChunkName: 'user-posts' */ './components/user/Posts.vue');
-const User = () => import(/* webpackChunkName: 'user' */ './components/user/User.vue');
+// const User = () => import(/* webpackChunkName: 'user' */ './components/user/User.vue');
 const Accounts = () => import(/* webpackChunkName: 'accounts' */ './components/user/common/Accounts.vue');
 const MyInfo = () => import(/* webpackChunkName: 'my-info' */ './components/user/common/MyInfo.vue');
 const Password = () => import(/* webpackChunkName: 'password' */ './components/user/common/Password.vue');
@@ -26,8 +26,9 @@ const NotFound = () => import(/* webpackChunkName: 'not-found' */ './views/NotFo
 const Confirm = () => import(/* webpackChunkName: 'confirm' */ './views/Confirm.vue');
 const Reset = () => import(/* webpackChunkName: 'reset' */ './views/Reset.vue');
 const Add = () => import(/* webpackChunkName: 'add' */ './components/content/Add.vue');
+const Edit = () => import(/* webpackChunkName: 'edit' */ '@/components/content/Edit.vue');
 const Detail = () => import(/* webpackChunkName: 'detail' */ './components/content/Detail.vue');
-
+const User = () => import(/* webpackChunkName: 'home' */ '@/views/User.vue');
 Vue.use(Router);
 
 const router = new Router({
@@ -87,6 +88,36 @@ const router = new Router({
       name: 'add',
       component: Add,
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/edit/:tid',
+      props: true,
+      name: 'edit',
+      component: Edit,
+      meta: { requiresAuth: true },
+      beforeEnter (to, from, next) {
+        // 正常的情况 detail
+        if (
+          ['detail', 'myPost'].indexOf(from.name) !== -1 &&
+          to.params.page &&
+          to.params.page.isEnd === '0'
+        ) {
+          next();
+        } else {
+          // 用户在edit页面刷新的情况
+          const editData = localStorage.getItem('editData');
+          if (editData && editData !== '') {
+            const editObj = JSON.parse(editData);
+            if (editObj.isEnd === '0') {
+              next();
+            } else {
+              next('/');
+            }
+          } else {
+            next('/');
+          }
+        }
+      }
     },
     {
       path: '/detail/:tid',
@@ -189,10 +220,13 @@ router.beforeEach((to, from, next) => {
       store.commit('setToken', token);
       store.commit('setUserInfo', userInfo);
       store.commit('setIsLogin', true);
+      if (!store.state.ws) {
+        store.commit('initWebSocket', {});
+      }
     } else {
       localStorage.clear();
     }
-    
+
   }
 
   if (to.matched.some((record) => record.meta.requiresAuth)) {
@@ -207,7 +241,7 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     // 公共页面，不需要用户登录
-      next();
+    next();
   }
 });
 export default router;

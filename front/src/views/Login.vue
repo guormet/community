@@ -203,7 +203,7 @@ export default {
             this.$router.push({name: 'index'});
           });
         } else if (res.code === 10002) {
-          this.$refs.codefield.setErrors([ res.msg ]);
+          this.$refs.codefield.setErrors([res.msg]);
           this._getCode();
         } else {
           this.$alert(res.msg);

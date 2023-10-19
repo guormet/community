@@ -121,7 +121,7 @@ class LoginController {
     const checkCodeResult = await checkCode(sid, code);
     if (checkCodeResult) { // 验证码验证通过
       // 用户名MongoDB查库校验
-      const User1 = await User.findOne({ username: body.username });
+      const User1 = await User.findOne({ username: body.username });      
       if (User1 && typeof User1.username !== 'undefined') { // 存在邮箱
         check = false;
         errorMsg = {
@@ -149,9 +149,7 @@ class LoginController {
           password: enPwd,
           created: moment().format('YYYY-MM-DD HH:mm:ss')
         });
-        console.log(0);
         const result = await user.save();
-        console.log(111);
         result.password = body.password;
         ctx.body = {
           code: 200,

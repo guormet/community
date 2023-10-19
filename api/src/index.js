@@ -10,9 +10,18 @@ import cors from '@koa/cors';
 import compose from 'koa-compose';
 import compress from 'koa-compress';
 import config from './config/index';
-import errorHandle from './common/ErrorHandle';
+import errorHandle from './common/errorHandle';
+import WebSocketServer from './config/WebSocket';
 
 const app = new Koa();
+const ws = new WebSocketServer()
+
+ws.init()
+global.ws = ws
+global.console.log2 = (msg, index = 1) => { // 用于控制台打印
+  console.log(`===> ${index}: `, msg)
+  console.log('===> typeof: ', typeof msg)
+}
 
 const isDevMode = process.env.NODE_ENV !== 'production';
 

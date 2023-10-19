@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="layui-table" border="0">
+    <table class="layui-table">
       <thead>
         <tr>
           <th class="title">
@@ -16,23 +16,67 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td class="text-left">收藏文章测试标题111</td>
-          <td class=" text-right pr0">2022-11-10 00:00:00</td>
+        <tr v-for="(item,index) in list" :key="'mycollect' + index">
+          <td class="title">
+            <router-link class="link" :to="{name: 'detail', params: {tid: item.tid}}">{{item.title}}</router-link>
+          </td>
+          <td class="text-right">{{item.created | moment}}</td>
         </tr>
       </tbody>
     </table>
+    <imooc-page
+      v-show="total > 0"
+      :total="total"
+      :current="current"
+      :align="'left'"
+      :has-total="true"
+      :has-select="true"
+      @changeCurrent="handleChange"></imooc-page>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'UserMyCollection'
-  };
+import { getCollect } from '@/api/user';
+import Pagination from '@/components/modules/pagination/Index';
+export default {
+  name: 'my-collection',
+  components: {
+    'imooc-page': Pagination
+  },
+  data () {
+    return {
+      list: [],
+      total: 0,
+      current: 0,
+      page: 0,
+      limit: 10
+    };
+  },
+  mounted () {
+    this.getCollectList();
+  },
+  methods: {
+    getCollectList () {
+      getCollect({
+        page: this.current,
+        limit: this.limit
+      }).then((res) => {
+        if (res.code === 200) {
+          this.list = res.data;
+          this.total = res.total;
+        }
+      });
+    },
+    handleChange (val) {
+      this.current = val;
+      this.getCollectList();
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-  .title {
-    width: 70%;
-  }
+.title {
+  width: 70%;
+}
 </style>

@@ -10,6 +10,9 @@ import config from '@/config';
 import { setValue, getValue } from '@/config/RedisConfig';
 import ErrorCode from '@/common/ErrorCode';
 import { aesDecrypt, aesEncrypt } from '@/common/crypto';
+import Comments from '@/model/Comments'
+import qs from 'qs'
+import CommentsHands from '@/model/CommentsHands'
 
 class UserController {
   /**
@@ -254,6 +257,138 @@ class UserController {
       }
     }
   }
+  
+  /**
+   * 获取收藏列表
+   * @param {*} ctx 
+   */
+  async getCollectByUid (ctx) {
+    const params = ctx.query
+    const obj = await getJWTPayload(ctx.header.authorization)
+    const result = await UserCollect.getListByUid(
+      obj._id,
+      params.page,
+      params.limit ? parseInt(params.limit) : 10
+    )
+    const total = await UserCollect.countByUid(obj._id)
+    if (result.length > 0) {
+      ctx.body = {
+        code: 200,
+        data: result,
+        total,
+        msg: '查询列表成功'
+      }
+    } else {
+      ctx.body = {
+        code: 500,
+        msg: '查询列表失败'
+      }
+    }
+  }
+
+  /**
+   * 获取用户基本信息
+   * @param {*} ctx 
+   */
+  async getBasicInfo (ctx) {
+    const params = ctx.query
+    // const obj = await getJWTPayload(ctx.header.authorization)
+    const uid = params.uid || ctx._id
+    let user = await User.findByID(uid)
+    // 取得用户的签到记录 有没有 > today 0:00:00
+    if (user) {
+      user = user.toJSON()
+
+      const date = moment().format('YYYY-MM-DD')
+      const result = await SignRecord.findOne({
+        uid: uid,
+        created: { $gte: date + ' 00:00:00' }
+      })
+      if (result && result.uid) {
+        user.isSign = true
+      } else {
+        user.isSign = false
+      }
+    }
+    ctx.body = {
+      code: 200,
+      data: user,
+      msg: '查询成功！'
+    }
+  }
+  
+  /**
+   * 获取历史消息
+   * 记录评论之后，给作者发送消息
+   * @param {*} ctx 
+   */
+  async getMsg (ctx) {
+    const params = ctx.query
+    const page = params.page ? params.page : 0
+    const limit = params.limit ? parseInt(params.limit) : 0
+    // 方法一： 嵌套查询 -> aggregate
+    // 方法二： 通过冗余换时间
+    const obj = await getJWTPayload(ctx.header.authorization)
+    const num = await Comments.getTotal(obj._id)
+    const result = await Comments.getMsgList(obj._id, page, limit)
+
+    ctx.body = {
+      code: 200,
+      data: result,
+      total: num
+    }
+  }
+
+  /**
+   * 获取历史消息
+   * 记录评论之后，给作者发送消息
+   * @param {*} ctx 
+   */
+  async getHands (ctx) {
+    const params = ctx.query
+    const page = params.page ? params.page : 0
+    const limit = params.limit ? parseInt(params.limit) : 0
+    // 方法一： 嵌套查询 -> aggregate
+    // 方法二： 通过冗余换时间
+    const obj = await getJWTPayload(ctx.header.authorization)
+    const result = await CommentsHands.getHandsByUid(obj._id, page, limit)
+
+    ctx.body = {
+      code: 200,
+      data: result
+    }
+  }
+  
+  /**
+   * 设置已读消息
+   * @param {*} ctx 
+   */
+  async setMsg (ctx) {
+    const params = ctx.query
+    if (params.id) {
+      const result = await Comments.updateOne(
+        { _id: params.id },
+        { isRead: '1' }
+      )
+      if (result.ok === 1) {
+        ctx.body = {
+          code: 200
+        }
+      }
+    } else {
+      const obj = await getJWTPayload(ctx.header.authorization)
+      const result = await Comments.updateMany(
+        { uid: obj._id },
+        { isRead: '1' }
+      )
+      if (result.ok === 1) {
+        ctx.body = {
+          code: 200
+        }
+      }
+    }
+  }
+
 }
 
 export default new UserController();

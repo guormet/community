@@ -23,7 +23,7 @@
 <script>
   export default {
     name: 'QuoteCom',
-    props: [ 'isShow' ],
+    props: ['isShow'],
     data () {
       return {
         quote: ''

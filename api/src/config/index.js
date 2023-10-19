@@ -25,10 +25,24 @@ const baseUrl = process.env.NODE_ENV === 'production' ? 'http://front.dev.toimc.
 
 const uploadPath = process.env.NODE_ENV === 'production' ? '/app/public' : path.join(path.resolve(__dirname), '../../public');
 
+const adminEmail = ['admin-email@qq.com']
+
+const publicPath = [/^\/public/, /^\/login/, /^\/content/, /^\/user/, /^\/comments/]
+
+const isDevMode = process.env.NODE_ENV !== 'production'
+
+const port = 3000
+const wsPort = 3001
+
 export default {
   DB_URL,
   REDIS,
   JWT_SECRET,
   baseUrl,
-  uploadPath
+  uploadPath,
+  adminEmail,
+  publicPath,
+  isDevMode,
+  port,
+  wsPort,
 };

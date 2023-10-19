@@ -13,7 +13,7 @@ import listMixin from './ListMixin';
 import ListItem from './ListItem';
   export default {
     name: 'TopCom',
-    mixins: [ listMixin ],
+    mixins: [listMixin],
     components: {
       'ktn-list-item': ListItem
     },

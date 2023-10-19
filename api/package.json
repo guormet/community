@@ -38,7 +38,8 @@
     "redis": "^3.0.2",
     "saslprep": "^1.0.3",
     "svg-captcha": "^1.4.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "ws": "^7.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",

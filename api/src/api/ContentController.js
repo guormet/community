@@ -188,7 +188,10 @@ class ContentController {
     }
   }
 
-  // 更新帖子
+  /**
+   * 更新帖子
+   * @param {*} ctx 
+   */
   async updatePost (ctx) {
     const { body } = ctx.request;
     const sid = body.sid;
@@ -248,7 +251,11 @@ class ContentController {
     }
   }
 
-  // 获取文章详情
+  /**
+   * 获取文章详情
+   * @param {*} ctx 
+   * @returns 
+   */
   async getPostDetail (ctx) {
     const params = ctx.query;
     if (!params.tid) {
@@ -305,6 +312,92 @@ class ContentController {
     }
     // const post = await Post.findOne({ _id: params.tid })
     // const result = rename(post.toJSON(), 'uid', 'user')
+  }
+
+  
+  /**
+   * 获取用户发贴记录
+   * @param {*} ctx 
+   */
+  async getPostByUid (ctx) {
+    const params = ctx.query
+    const obj = await getJWTPayload(ctx.header.authorization)
+    const result = await Post.getListByUid(
+      obj._id,
+      params.page,
+      params.limit ? parseInt(params.limit) : 10
+    )
+    const total = await Post.countByUid(obj._id)
+    if (result.length > 0) {
+      ctx.body = {
+        code: 200,
+        data: result,
+        total,
+        msg: '查询列表成功'
+      }
+    } else {
+      ctx.body = {
+        code: 500,
+        msg: '查询列表失败'
+      }
+    }
+  }
+
+  
+  /**
+   * 删除发贴记录
+   * @param {*} ctx 
+   */
+  async deletePostByUid (ctx) {
+    const params = ctx.query
+    const obj = await getJWTPayload(ctx.header.authorization)
+    const post = await Post.findOne({ uid: obj._id, _id: params.tid })
+    if (post.id === params.tid && post.isEnd === '0') {
+      await ContentController.prototype.deletePost(ctx)
+      // const result = await Post.deleteOne({ _id: params.tid })
+      // if (result.ok === 1) {
+      //   ctx.body = {
+      //     code: 200,
+      //     msg: '删除成功'
+      //   }
+      // } else {
+      //   ctx.body = {
+      //     code: 500,
+      //     msg: '执行删除失败！'
+      //   }
+      // }
+    } else {
+      ctx.body = {
+        code: 500,
+        msg: '删除失败，无权限！'
+      }
+    }
+  }
+  /**
+   * 获取用户发贴记录
+   * @param {*} ctx 
+   */
+  async getPostPublic (ctx) {
+    const params = ctx.query
+    const result = await Post.getListByUid(
+      params.uid,
+      params.page,
+      params.limit ? parseInt(params.limit) : 10
+    )
+    const total = await Post.countByUid(params.uid)
+    if (result.length > 0) {
+      ctx.body = {
+        code: 200,
+        data: result,
+        total,
+        msg: '查询列表成功'
+      }
+    } else {
+      ctx.body = {
+        code: 500,
+        msg: '查询列表失败'
+      }
+    }
   }
 }
 

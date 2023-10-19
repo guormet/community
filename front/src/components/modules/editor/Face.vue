@@ -16,7 +16,7 @@
   import faces from '@/assets/js/face';
   export default {
     name: 'EditorFaceCom',
-    props: [ 'isShow', 'ctrl' ],
+    props: ['isShow', 'ctrl'],
     data () {
       return {
         lists: faces

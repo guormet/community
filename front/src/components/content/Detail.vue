@@ -264,8 +264,8 @@
   import { scrollToElem } from '@/utils/common';
   export default {
     name: 'DetailCom',
-    mixins: [ CodeMix ],
-    props: [ 'tid' ],
+    mixins: [CodeMix],
+    props: ['tid'],
     components: {
       'ktn-hotlist': HotList,
       'ktn-ads': Ads,

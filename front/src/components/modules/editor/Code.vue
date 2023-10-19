@@ -24,7 +24,7 @@
 <script>
   export default {
     name: 'CodeCom',
-    props: [ 'isShow', 'width', 'height' ],
+    props: ['isShow', 'width', 'height'],
     data () {
       return {
         code: ''

@@ -103,11 +103,11 @@ class CommentsController {
     const post = await Post.findOne({ _id: body.tid });
     newComment.uid = post.uid;
     const comment = await newComment.save();
-    // const num = await Comments.getTotal(post.uid);
-    // global.ws.send(post.uid, JSON.stringify({
-    //   event: 'message',
-    //   message: num
-    // }));
+    const num = await Comments.getTotal(post.uid);
+    global.ws.send(post.uid, JSON.stringify({
+      event: 'message',
+      message: num
+    }));
     // 评论记数
     const updatePostresult = await Post.updateOne({ _id: body.tid }, { $inc: { answer: 1 } });
     if (comment._id && updatePostresult.acknowledged && updatePostresult.modifiedCount === 1) {

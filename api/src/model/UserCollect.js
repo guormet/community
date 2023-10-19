@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const UserCollectSchema = new Schema(
   {
     uid: { type: String },
+    title: {type: String},
     tid: { type: String, ref: 'post' }
   },
   { timestamps: { createdAt: 'created', updatedAt: 'updated' } }

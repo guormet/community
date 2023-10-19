@@ -35,8 +35,6 @@ const uploadImg = (formData) => axios.post('/content/upload', formData);
  * @returns 
  */
 const addPost = (data) => axios.post('/content/add', { ...data });
-
-
 /**
  * 获取文章详情
  * @param {*} tid 
@@ -54,6 +52,12 @@ const getDetail = (tid) => {
   }
   return axios.get('/public/content/detail?tid=' + tid, headers);
 };
+/**
+ * 更新文章，编辑帖子
+ * @param {*} data 
+ * @returns 
+ */
+const updatePost = (data) => axios.post('/content/update', { ...data });
 export {
   getList,
   getTips,
@@ -61,5 +65,6 @@ export {
   getTopWeek,
   uploadImg,
   addPost,
-  getDetail
+  getDetail,
+  updatePost
 };

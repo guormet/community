@@ -57,7 +57,7 @@
   import Preview from './Preview';
   export default {
     name: 'EditorCom',
-    props: [ 'initContent' ],
+    props: ['initContent'],
     components: {
       Face,
       ImgUpload,

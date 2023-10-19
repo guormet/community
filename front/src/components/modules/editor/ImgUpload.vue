@@ -43,7 +43,7 @@
   import { uploadImg } from '@/api/content';
   export default {
     name: 'ImgUploadCom',
-    props: [ 'isShow', 'ctrl' ],
+    props: ['isShow', 'ctrl'],
     data () {
       return {
         pic: '',
